@@ -1,0 +1,99 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="数据结构第一周"><meta name="keywords" content="C++,旗舰学科,数据结构,算法"><meta name="author" content="McKinley Lu,undefined"><meta name="copyright" content="McKinley Lu"><title>数据结构第一周【永恒王子的后花园】</title><link rel="stylesheet" href="/css/fan.css"><link rel="stylesheet" href="/css/thirdparty/jquery.mCustomScrollbar.min.css"><link rel="icon" href="/favicon-32x32-next.png"><!-- script(src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML")--><script src="/js/mathjax/mathjax.js"></script><script type="text/x-mathjax-config"><!-- hexo-inject:begin --><!-- hexo-inject:end -->MathJax.Hub.Config({
+    tex2jax: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
+});
+</script><script>var isPassword = '' || false;
+if (isPassword) {
+    if (prompt('请输入文章密码') !== '') {
+        alert('密码错误！');
+        history.back();
+    }
+}</script><script>window.GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  }
+}</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></head><body><canvas id="universe"></canvas><!--#body--><div id="sidebar"><div class="toggle-sidebar-info button-hover"><span data-toggle="文章目录">站点概览</span></div><div class="sidebar-toc"><div class="sidebar-toc-title">目录</div><div class="sidebar-toc-progress"><span class="progress-notice">您已阅读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc-progress-bar"></div></div><div class="sidebar-toc-content" id="sidebar-toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#线性表"><span class="toc-number">1.</span> <span class="toc-text">线性表</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#线性表的逻辑结构"><span class="toc-number">1.1.</span> <span class="toc-text">线性表的逻辑结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#顺序表"><span class="toc-number">1.2.</span> <span class="toc-text">顺序表</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#谢谢访问"><span class="toc-number">2.</span> <span class="toc-text">谢谢访问</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info-avatar"><img class="author-info-avatar-img" src="/avatarmy.jpeg"></div><div class="author-info-name">McKinley Lu</div><div class="author-info-description">心之所向 素履以往 生如逆旅 一苇以航</div><div class="links-buttons"><a class="links-button button-hover" href="https://github.com/McKinleyLu" target="_blank">GitHub<i class="icon-dot bg-color3"></i></a><a class="links-button button-hover" href="mailto:lt981109@gmail.com" target="_blank">E-Mail<i class="icon-dot bg-color8"></i></a><a class="links-button button-hover" href="tencent://message/?uin=1433059961&amp;Site=&amp;Menu=yes" target="_blank">QQ<i class="icon-dot bg-color6"></i></a><a class="links-button button-hover" href="https://me.csdn.net/LuTong2018" target="_blank">CSDN<i class="icon-dot bg-color2"></i></a><a class="links-button button-hover" href="https://www.luogu.org/space/show?uid=206308" target="_blank">洛谷<i class="icon-dot bg-color6"></i></a></div><div class="author-info-articles"><a class="author-info-articles-archives article-meta" href="/archives"><span class="pull-top">日志</span><span class="pull-bottom">9</span></a><a class="author-info-articles-tags article-meta" href="/tags"><span class="pull-top">标签</span><span class="pull-bottom">9</span></a><a class="author-info-articles-categories article-meta" href="/categories"><span class="pull-top">分类</span><span class="pull-bottom">8</span></a></div><div class="friend-link"><a class="friend-link-text" href="https://huowuyan.cn/" target="_blank">友情链接  ||  或无言</a></div></div></div><div id="main-container"><header><div id="menu-outer"><i class="menu-list-icon fas fa-bars"></i><nav id="menu-inner"><a class="menu-item" href="/">首页</a><a class="menu-item" href="/tags">标签</a><a class="menu-item" href="/categories">分类</a><a class="menu-item" href="/archives">归档</a><a class="menu-item" href="/about">关于</a></nav><div class="right-info"><a class="title-name" href="/">永恒王子的后花园</a><span id="now-time"></span></div></div></header><div id="content-outer"><div id="content-inner"><article id="post"><div class="post-header"><div class="title">数据结构第一周</div><div class="container"><time class="button-hover post-date"><i class="fas fa-calendar-alt article-icon" aria-hidden="true"></i> 发表于 2019-07-20 | 更新于 2019-07-20</time><!--time.button-hover.post-date #[i.fas.fa-calendar-alt.article-icon(aria-hidden="true")] #[=__('post.modified')] #[=date(page['updated'], config.date_format)]--><div class="button-hover categories"><i class="fa fa-inbox article-icon" aria-hidden="true"></i><a class="link-a" href="/categories/旗舰学科/">旗舰学科</a><i class="fa fa-angle-right" style="margin: 0 8px;"></i><i class="fa fa-inbox article-icon" aria-hidden="true"></i><a class="link-a" href="/categories/旗舰学科/数据结构/">数据结构</a></div><div class="button-hover tags"><i class="fa fa-tag article-icon" aria-hidden="true"></i><a class="link-a" href="/tags/C/">C++</a><span>&nbsp;|&nbsp;</span><i class="fa fa-tag article-icon" aria-hidden="true"></i><a class="link-a" href="/tags/旗舰学科/">旗舰学科</a><span>&nbsp;|&nbsp;</span><i class="fa fa-tag article-icon" aria-hidden="true"></i><a class="link-a" href="/tags/数据结构/">数据结构</a><span>&nbsp;|&nbsp;</span><i class="fa fa-tag article-icon" aria-hidden="true"></i><a class="link-a" href="/tags/算法/">算法</a></div></div></div><div class="main-content"><h3 id="线性表"><a href="#线性表" class="headerlink" title="线性表"></a>线性表</h3><ol>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><li>定义:线性表简称表，包含零个或多个元素的有序序列</li>
+<li>属性<ul>
+<li>表目 == 记录</li>
+<li>索引 == 下标</li>
+</ul>
+</li>
+<li>二元组B = (K,R) , K = {a0,a1,a2,…an-1}  R = {r} <a id="more"></a><br>具有反对称性  <a1,a2> , a1是a2的(直接)前驱，a2是a1的(直接)后继  </a1,a2></li>
+<li>特点<ul>
+<li>均匀性: 元素类型相同</li>
+<li>有序性</li>
+</ul>
+</li>
+<li>线性结构分类<ul>
+<li>简单:线性表、栈、队列、散列表</li>
+<li>难：广义表，多维数组、文件</li>
+</ul>
+</li>
+<li>访问方式<ul>
+<li>直接访问</li>
+<li>间接访问</li>
+<li>目录访问</li>
+</ul>
+</li>
+<li>(线性)表的三个方面<ul>
+<li>逻辑结构</li>
+<li>存储结构</li>
+<li>运算</li>
+</ul>
+</li>
+</ol>
+<h4 id="线性表的逻辑结构"><a href="#线性表的逻辑结构" class="headerlink" title="线性表的逻辑结构"></a>线性表的逻辑结构</h4><ol>
+<li>属性：长度、表头、表尾、位置</li>
+<li>有存储结构可分为<ul>
+<li>顺序表(是由数组实现的)</li>
+<li>链表</li>
+</ul>
+</li>
+<li>按操作可分为<ul>
+<li>栈</li>
+<li>队列</li>
+</ul>
+</li>
+<li>按运算<br>清除操作、插入操作、删除操作等</li>
+</ol>
+<h4 id="顺序表"><a href="#顺序表" class="headerlink" title="顺序表"></a>顺序表</h4><ol>
+<li>亦称向量，由数组实现</li>
+<li>特性<ul>
+<li>元素相同</li>
+<li>顺序、连续储存</li>
+<li>元素地址公式 Loc(i) = Loc(i0) + c * i   其中 (c = sizeof(ELEM));</li>
+</ul>
+</li>
+<li>顺序表插入与删除的算法分析<ul>
+<li>插入移动次数: n - i</li>
+<li>删除移动次数：n - i - 1</li>
+</ul>
+</li>
+</ol>
+<div style="text-align:center;color:green;"> 未完待续</div>
+
+<h3 id="谢谢访问"><a href="#谢谢访问" class="headerlink" title="谢谢访问"></a>谢谢访问</h3><div style=" width:100px; margin:0 auto"> 
+  <img src="/images/thank.jpg" style=" margin:0 auto; width:100px; height: 100px; ">
+  </div></div><div class="post-copyright"><div class="post-copyright-author"><span class="post-copyright-meta">本文作者: </span><span class="post-copyright-info"><a href="mailto:undefined">McKinley Lu</a></span></div><div class="post-copyright-type"><span class="post-copyright-meta">本文链接: </span><span class="post-copyright-info"><a href="http://McKinleyLu.icu/2019/07/20/数据结构第一周/">http://McKinleyLu.icu/2019/07/20/数据结构第一周/</a></span></div><div class="post-copyright-notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="undefined"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a></a> 许可协议。转载请注明来自 <a href="http://McKinleyLu.icu">永恒王子的后花园</a>！</span></div></div></article><div id="pagination"><div class="next-post pull-right"><span class="line line-top"></span><span class="line line-right"></span><span class="line line-bottom"></span><span class="line line-left"></span><a href="/2019/07/17/C-第二周/"><span>C++第二周</span><span>&nbsp;</span><i class="fas fa-angle-right"></i></a></div></div><!--div!= paginator()--></div></div><div class="button-hover" id="return-top"><i class="fas fa-arrow-up" aria-hidden="true"></i></div><footer><div id="footer"><div class="button-hover" id="side-button"><i class="fas fa-arrow-right"></i></div><div class="right-content"><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fas fa-file-o"></i></span><span id="busuanzi_value_page_pv"></span><span></span></div><div class="copyright">&copy;2019 By McKinley Lu</div></div></div></footer></div><!--js(src=url_for(url) + '?version=' + version())--><script src="/js/thirdparty/jquery-3.3.1.min.js"></script><!--script(src=url)--><!--js(src=url_for(url) + '?version=' + version())--><script src="/js/thirdparty/velocity.min.js"></script><!--script(src=url)--><!--js(src=url_for(url) + '?version=' + version())--><script src="/js/thirdparty/jquery.mCustomScrollbar.concat.min.js"></script><!--script(src=url)--><!--js(src=url_for(url) + '?version=' + version())--><script src="/js/fan.js"></script><!--script(src=url)--><!--js(src=url_for(url) + '?version=' + version())--><script src="/js/canvas_bg.js"></script><!--script(src=url)--><!--js(src=url_for(url) + '?version=' + version())--><script src="/js/utils.js"></script><!--script(src=url)--><!--js(src=url_for(url) + '?version=' + version())--><script src="/js/scroll.js"></script><!--script(src=url)--><!--js(src=url_for(url) + '?version=' + version())--><script src="/js/sidebar.js"></script><!--script(src=url)--><!--js(src=url_for(url) + '?version=' + version())--><script src="/js/copy.js"></script><!--script(src=url)--><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end --></body></html>
