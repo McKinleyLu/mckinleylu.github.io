@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title><![CDATA[数字三角形]]></title>
+    <url>%2F2019%2F08%2F23%2F%E6%95%B0%E5%AD%97%E4%B8%89%E8%A7%92%E5%BD%A2%2F</url>
+    <content type="text"><![CDATA[题目描述 图1显示了一个数字三角形。编写一个程序，计算从顶部开始到底部某处的路径上传递的最大数字总和。每个步骤可以沿对角线向下滑动，也可以沿斜向下滑动到右侧。 输入您的程序是从标准输入读取。第一行包含一个整数N：三角形中的行数。以下N行描述了三角形的数据。三角形中的行数大于 1但小于等于 100.三角形中的数字全部为整数，介于0到99之间。 输出你的程序是写入标准输出。最高总和写为整数。 输入样例573 88 1 0 2 7 4 44 5 2 6 5 输出样例30 分析分析1通过分析输入样式，我们观察到，一个数去加的下一行对应的列以及下一行j+1列。故这道题可以用递归求解? 递归参数:一个数的横纵坐标 约束条件:当函数行数等于最大行数N代码如下 #include &lt;bits/stdc++.h&gt;using namespace std;//递归程序const int M = 1000;int d[M+10][M+10];int n = 0 ;int maxs(int i , int j)&#123; if(i == n) &#123; return d[i][j]; &#125; else &#123; int a = maxs(i+1,j); int b = maxs(i+i,j+1); if(a &gt; b)&#123; return a + d[i][j];&#125; else &#123; return b + d[i][j];&#125; &#125;&#125;int main() &#123; int n = 0 ; cin &gt;&gt; n ; for(int i = 0 ; i &lt; n ; ++i) for(int j = 0 ; j &lt; i ; ++j) &#123; cin &gt;&gt; d[i][j]; &#125; cout&lt;&lt;maxs(1,1); return 0;&#125; 答案是否定的，因为你会发现从第三行开始，中间的因为递归，全部被重复计算多次，如果当数字三角型足够大时，题目肯定超时。 分析2分析1的递归显然是不能用了。但我们设一个二维数组，将算过的值保存起来，避免二次或多次计算。以下是记忆型动规的代码 const int M = 1000;int d[M+10][M+10];int n = 0 ;int Max_Array[M+10][M+10];int maxs(int i , int j)&#123; if(i == n ) &#123; return d[i][j]; &#125; else &#123; if(Max_Array[i+1][j] == -1 )&#123;Max_Array[i+1][j] = maxs(i+1,j);&#125; if(Max_Array[i+1][j+1] == -1)&#123;Max_Array[i+1][j+1] = maxs(i+1,j+1);&#125; if(Max_Array[i+1][j] &gt; Max_Array[i+1][j+1]) &#123; return Max_Array[i+1][j] + d[i][j];&#125; else&#123; return Max_Array[i+1][j+1] + d[i][j];&#125; &#125;&#125;int main() &#123; int n = 0 ; cin &gt;&gt; n ; for(int i = 0 ; i &lt; n ; ++i) for(int j = 0 ; j &lt; i ; ++j) &#123; cin &gt;&gt; d[i][j]; Max_Array[i][j] = - 1; &#125; cout &lt;&lt; maxs(1,1); return 0;&#125; 分析3分析2有效地解决了超时的问题，但开出了过多的空间。通过观察我们不难发现，第r行可以由r+1行算出。比如说，第四行的第一个数的最大路径值，等于第五行它的同列与第五行同列+1列的最大值加这个第四行的数的值。而且当第四行第一个数被算出后，第五行第一个数就没用了。这时我们可以让第四行第一行值覆盖第五行第一个值。 这就是滚动数组，对二维数组进行降维。这种动规方法为递推式动规，即用已知的值计算出未知的值。参考代码如下const int M = 1000;int d[M+10][M+10];int n = 0 ;int Maxs[M+10];int main() &#123; int n = 0 ; cin &gt;&gt; n ; //input for(int i = 0 ; i &lt; n ; ++i) for(int j = 0 ; j &lt; i ; ++j) &#123; cin &gt;&gt; d[i][j]; &#125; //init status for(int i = 0 ; i &lt; n ; ++i)&#123;Maxs[i] = d[n][i];&#125; //start for(int i = n-2 ; i &lt;=0 ; ++i) &#123; for(int j = 0 ; j &lt; i ; ++j) &#123; Maxs[i] = max(d[i][j] + Maxs[i] , d[i][j]+ Maxs[i+1]); &#125; &#125; cout &lt;&lt; Maxs[0]; return 0;&#125; 谢谢访问]]></content>
+      <categories>
+        <category>算法学习与竞赛</category>
+        <category>动态规划</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[逆波兰表达式求值]]></title>
+    <url>%2F2019%2F08%2F21%2F%E9%80%86%E6%B3%A2%E5%85%B0%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC%2F</url>
+    <content type="text"><![CDATA[题目描述根据逆波兰表示法，求表达式的值。有效的运算符包括 +, -, *, / 。每个运算对象可以是整数，也可以是另一个逆波兰表达式。说明： 整数除法只保留整数部分。 给定逆波兰表达式总是有效的。换句话说，表达式总会得出有效数值且不存在除数为 0 的情况。 示例1输入: ["2", "1", "+", "3", "*"]输出: 9解释: ((2 + 1) * 3) = 9 示例2输入: ["4", "13", "5", "/", "+"]输出: 6解释: (4 + (13 / 5)) = 6 示例3输入: ["10", "6", "9", "3", "+", "-11", "*", "/", "*", "17", "+", "5", "+"]输出: 22解释: ((10 * (6 / ((9 + 3) * -11))) + 17) + 5= ((10 * (6 / (12 * -11))) + 17) + 5= ((10 * (6 / -132)) + 17) + 5= ((10 * 0) + 17) + 5= (0 + 17) + 5= 17 + 5= 22 分析我们可以发现，一个符号要操作两个数，一定在符号的左边，所以用栈解决最简单 参考代码class Solution &#123;public: int change(string m) &#123; stringstream ss ; ss &lt;&lt; m ; int a ; ss &gt;&gt; a ; return a ; &#125; int evalRPN(vector&lt;string&gt;&amp; tokens) &#123; int len = tokens.size(),ans= 0 ; stack&lt;int&gt; q; if(tokens[0] != "*" &amp;&amp; tokens[0] != "/" &amp;&amp; tokens[0] != "+" &amp;&amp; tokens[0] != "-")&#123;q.push(change(tokens[0]));&#125; for(int i = 0; i &lt; len ; ++i) &#123; if(tokens[i] &gt;= "0" &amp;&amp; tokens[i] &lt;= "9") &#123; q.push(change(tokens[i])); &#125; else &#123; int a = q.top(); q.pop(); int b = q.top(); q.pop(); if(tokens[i] == "*") &#123;ans = a*b ; q.push(ans);&#125; if(tokens[i] == "/") &#123;ans = a/b ; q.push(ans);&#125; if(tokens[i] == "+") &#123;ans = a+b ; q.push(ans);&#125; if(tokens[i] == "-") &#123;ans = a-b ; q.push(ans);&#125; &#125; &#125; return ans ; &#125;&#125;; 谢谢访问]]></content>
+      <categories>
+        <category>LeetcodeDateBase</category>
+        <category>Stack</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>算法</tag>
+        <tag>leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[有效的括号]]></title>
+    <url>%2F2019%2F08%2F21%2F%E6%9C%89%E6%95%88%E7%9A%84%E6%8B%AC%E5%8F%B7%2F</url>
+    <content type="text"><![CDATA[题目表述给定一个只包括 ‘(‘，’)’，’{‘，’}’，’[‘，’]’ 的字符串，判断字符串是否有效。有效字符串需满足： 左括号必须用相同类型的右括号闭合。 左括号必须以正确的顺序闭合。 注意空字符串可被认为是有效字符串。 示例1输入: "()"输出: true 示例2输入: "()[]&#123;&#125;"输出: true 示例3输入: "(]"输出: false 示例4输入: "([)]"输出: false 分析这是一道典型的栈结构的题，因为它体现了LIFO特性 思路一 首先要先往栈里放一个元素 紧着利用for循环，比较接下来的字符是否可以栈顶元素匹配成一对括号，如果不可以，则将其也压如栈中；如果可以，就将栈顶元素出栈 当for循环结束时，如果栈不为空，则输出false，否则输出true 思路二 构造两个栈，左括号放入栈一，右括号放入栈二 当放入结束后，开始同时从两个栈取出元素，如果有一对不匹配，则返回false 当两个栈全为空时，依旧没有return，则返回true 参考代码(这里只提供思路一)class Solution &#123;public: bool isValid(string s) &#123; stack&lt;char&gt; result; int n=s.size(); if(n==0) return true; for(int i=0;i&lt;n;i++) &#123; if(result.empty()) result.push(s[i]); else if(result.top()=='('&amp;&amp;s[i]==')'|| result.top()=='['&amp;&amp;s[i]==']'|| result.top()=='&#123;'&amp;&amp;s[i]=='&#125;') result.pop(); else result.push(s[i]); &#125; return result.empty(); &#125;&#125;; 谢谢访问]]></content>
+      <categories>
+        <category>LeetcodeDateBase</category>
+        <category>Stack</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>算法</tag>
+        <tag>leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[1162. 地图分析]]></title>
+    <url>%2F2019%2F08%2F20%2F%E5%9C%B0%E5%9B%BE%E5%88%86%E6%9E%90%2F</url>
+    <content type="text"><![CDATA[题目描述你现在手里有一份大小为 N x N 的『地图』（网格） grid，上面的每个『区域』（单元格）都用 0 和 1 标记好了。其中 0 代表海洋，1 代表陆地，你知道距离陆地区域最远的海洋区域是是哪一个吗？请返回该海洋区域到离它最近的陆地区域的距离。 我们这里说的距离是『曼哈顿距离』（ Manhattan Distance）：(x0, y0) 和 (x1, y1) 这两个区域之间的距离是 |x0 - x1| + |y0 - y1| 。如果我们的地图上只有陆地或者海洋，请返回 -1。 示例1 输入：[[1,0,1],[0,0,0],[1,0,1]]输出：2解释： 海洋区域 (1, 1) 和所有陆地区域之间的距离都达到最大，最大距离为 2。 示例2 输入：[[1,0,0],[0,0,0],[0,0,0]]输出：4解释： 海洋区域 (2, 2) 和所有陆地区域之间的距离都达到最大，最大距离为 4。 提示 1 &lt;= grid.length == grid[0].length &lt;= 100 grid[i][j] 不是 0 就是 1 分析这也是一道队列的题目，恰好和我曾经数据结构实验的迷宫类似首先，将原本grid[i][j] = 1的(陆地)全部入队。其次我们从一个陆地出发，寻找从上下左右寻找grid[i][j] = 0的地方，第一次循环(循环的结束标志为上一次加入队列的元素未处理个数)，将一部分海洋变成陆地，即grid[i][j] = 1。之后为cnt++，即走一步距离。重复上面的动作，知道queue没有元素。此时返回cnt即为所求。 参考代码class Solution &#123;public: const int directions[5] = &#123;0, 1, 0, -1, 0&#125;; int maxDistance(vector&lt;vector&lt;int&gt;&gt;&amp; grid) &#123; int ret = 0; int N = grid.size(); queue&lt;pair&lt;int, int&gt;&gt; q; // 将陆地(值为 1)的点入队 for (int i = 0; i &lt; N; i++) &#123; for (int j = 0; j &lt; N; j++) &#123; if (grid[i][j] == 1) &#123; q.push(&#123;i, j&#125;); &#125; &#125; &#125; // 全是海洋或全是陆地 if (q.size() == 0 || q.size() == N * N) return -1; while (!q.empty()) &#123; int s = q.size(); int r = 0; while (s != 0) &#123; pair&lt;int, int&gt; front = q.front(); q.pop(); // 4 个方向遍历 for (int i = 0; i &lt; 4; i++) &#123; int nx = front.first + directions[i]; int ny = front.second + directions[i + 1]; if (nx &gt;= N || ny &gt;= N || nx &lt; 0 || ny &lt; 0 || grid[nx][ny] == 1) continue; r++; // 这里没有新开二位数组做记录，而是直接在原数组上做标记 grid[nx][ny] = 1; q.push(&#123;nx, ny&#125;); &#125; s--; &#125; if (r &gt; 0) ret++; &#125; return ret; &#125;&#125;; 谢谢访问]]></content>
+      <categories>
+        <category>Leetcode单周赛</category>
+        <category>week150</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>算法</tag>
+        <tag>leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[1161. 最大层内元素和]]></title>
+    <url>%2F2019%2F08%2F20%2F%E6%9C%80%E5%A4%A7%E5%B1%82%E5%86%85%E5%85%83%E7%B4%A0%E5%92%8C%2F</url>
+    <content type="text"><![CDATA[题目描述给你一个二叉树的根节点 root。设根节点位于二叉树的第 1 层，而根节点的子节点位于第 2 层，依此类推。请你找出层内元素之和 最大 的那几层（可能只有一层）的层号，并返回其中 最小 的那个。 示例 输入：[1,7,0,7,-8,null,null]输出：2解释：第 1 层各元素之和为 1，第 2 层各元素之和为 7 + 0 = 7，第 3 层各元素之和为 7 + -8 = -1，所以我们返回第 2 层的层号，它的层内元素之和最大。 分析这是一个典型的树与BFS综合题。通过计算树的每一层节点之和，方可回答此题。此题涉及到了队列的BFS。队列的作用是不仅要用于计算出当前层的节点值的和，还要保存本层节点孩子的地址。通过while()循环，算出一层的值。 参考代码class Solution &#123;public: int maxLevelSum(TreeNode* root) &#123; if(root == nullptr) &#123;return 0;&#125; // int maxlevel = 1 , curlevel = 1 , summax = 1 ; queue&lt;TreeNode*&gt; q ; q.push(root); while(!q.empty()) &#123; int s = q.size(); int cursum = 0; while(s) &#123; TreeNode* font = q.front(); q.pop(); if(font-&gt;left != nullptr)&#123;q.push(font-&gt;left);&#125; if(font-&gt;right != nullptr)&#123;q.push(font-&gt;right);&#125; cursum += font-&gt;val; --s; &#125; if(cursum &gt; summax)&#123;maxlevel = curlevel ; summax = cursum ; &#125; ++curlevel; &#125; return maxlevel; &#125;&#125;; 谢谢访问]]></content>
+      <categories>
+        <category>Leetcode单周赛</category>
+        <category>week150</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>算法</tag>
+        <tag>leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[1160. 拼写单词]]></title>
+    <url>%2F2019%2F08%2F20%2F%E6%8B%BC%E5%86%99%E5%8D%95%E8%AF%8D%2F</url>
+    <content type="text"><![CDATA[题目描述给你一份『词汇表』（字符串数组） words 和一张『字母表』（字符串） chars。假如你可以用 chars 中的『字母』（字符）拼写出 words 中的某个『单词』（字符串），那么我们就认为你掌握了这个单词。注意：每次拼写时，chars 中的每个字母都只能用一次。返回词汇表 words 中你掌握的所有单词的 长度之和。 实例1输入：words = ["cat","bt","hat","tree"], chars = "atach"输出：6解释： 可以形成字符串 "cat" 和 "hat"，所以答案是 3 + 3 = 6 实例2输入：words = ["hello","world","leetcode"], chars = "welldonehoneyr"输出：10解释：可以形成字符串 "hello" 和 "world"，所以答案是 5 + 5 = 10。 分析此题涉及到字符匹配，是一般的字符匹配题，难度很小。通过调用string的find方法，同时定义一个temp字符串，放到for循环里，每一次循环都更新为chars。for循环里的循环次数为words中的字符串个数。在每一次更新中，利用find()函数对words[i]中的每一个字符进行寻找，若找不到，直接continue，否则就使temp对应的字符变成’-1’(题目里事先说只有小写字母)。最后，如果word[i]中的字符都可以由chars提供，则令cnt+words[i].length()；循环结束后，直接返回出cnt值就行啦。 参考代码class Solution &#123;public: int countCharacters(vector&lt;string&gt;&amp; words, string chars) &#123; int len = words.size(); int num = 0; for(int i = 0 ; i &lt; len ; ++i) &#123; string temp = chars; int cnt = 0,flag = 0 ; for(int j = 0 ; j &lt; words[i].size() ; ++j) &#123; if(temp.find(words[i][j]) == string :: npos) &#123; flag = 0 ; break; &#125; else &#123; int s = temp.find(words[i][j]); temp[s] = '-1'; flag = 1; &#125; &#125; if(flag == 1)&#123;num+=words[i].length();&#125; &#125; return num ; &#125;&#125;; 谢谢访问]]></content>
+      <categories>
+        <category>Leetcode单周赛</category>
+        <category>week150</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>算法</tag>
+        <tag>leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[739. 每日温度]]></title>
+    <url>%2F2019%2F08%2F20%2F%E6%AF%8F%E6%97%A5%E6%B8%A9%E5%BA%A6%2F</url>
+    <content type="text"><![CDATA[题目描述根据每日 气温 列表，请重新生成一个列表，对应位置的输入是你需要再等待多久温度才会升高超过该日的天数。如果之后都不会升高，请在该位置用 0 来代替。例如，给定一个列表 temperatures = [73, 74, 75, 71, 69, 72, 76, 73]，你的输出应该是 [1, 1, 4, 2, 1, 1, 0, 0]。提示：气温 列表长度的范围是 [1, 30000]。每个气温的值的均为华氏度，都是在 [30, 100] 范围内的整数。 输入数据[73,74,75,71,69,72,76,73] 期望数据[1,1,4,2,1,1,0,0] 分析此种找到一个数大的值的第一个数问题，就是明摆着告诉你要用到单调栈其实使用两次循环也可以，但是复杂度高，容易答题失败 什么是单调栈就是一个栈，里面的元素的大小按照他们所在栈内的位置，满足一定的单调性 本题如何利用单调栈维护一个单调递减的stack，stack内部存的是原数组的每个index。每当我们遇到一个比当前栈顶所对应的数大的数的时候，我们就遇到了一个“大数“。这个”大数“比它之前多少个数大我们不知道，但是至少比当前栈顶所对应的数大。我们弹出栈内所有对应数比这个数小的栈内元素，并更新它们在返回数组中对应位置的值。因为这个栈本身的单调性，当我们栈顶元素所对应的数比这个元素大的时候，我们可以保证，栈内所有元素都比这个元素大。对于每一个元素，当它出栈的时候，说明它遇到了自己的next greater element，我们也就要更新redult数组中的对应位置的值。如果一个元素一直不曾出栈，那么说明不存在next greater element，我们也就不用更新result数组了。参考代码class Solution &#123;public: vector&lt;int&gt; dailyTemperatures(vector&lt;int&gt;&amp; T) &#123; vector&lt;int&gt; result(T.size(),0); stack&lt;int&gt; q; for(int i = 0 ; i &lt; T.size() ; ++i) &#123; while(!q.empty()&amp;&amp;T[q.top()] &lt; T[i]) &#123; result[q.top()] = i - q.top(); q.pop(); &#125; q.push(i); &#125; return result; &#125;&#125;; 谢谢访问]]></content>
+      <categories>
+        <category>Leetcode</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>算法</tag>
+        <tag>Leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[1061 判断题 (15 分)]]></title>
+    <url>%2F2019%2F08%2F18%2F%E5%88%A4%E6%96%AD%E9%A2%98%2F</url>
+    <content type="text"><![CDATA[题目描述判断题的评判很简单，本题就要求你写个简单的程序帮助老师判题并统计学生们判断题的得分。 输入格式输入在第一行给出两个不超过 100 的正整数 N 和 M，分别是学生人数和判断题数量。第二行给出 M 个不超过 5 的正整数，是每道题的满分值。第三行给出每道题对应的正确答案，0 代表“非”，1 代表“是”。随后 N 行，每行给出一个学生的解答。数字间均以空格分隔。 输出格式按照输入的顺序输出每个学生的得分，每个分数占一行。 输入样例3 62 1 3 3 4 50 0 1 0 1 10 1 1 0 0 11 0 1 0 1 01 1 0 0 1 1 输出样例131112 分析此题过于简单，必为乙级第一题。用三个vector容器分别保存题目正解、题目满分以及学生得分。为避免超时，在输入学生作答结果同时进行判分，将分数保存在stu[i]里。 参考代码#include &lt;bits/stdc++.h&gt;using namespace std;vector&lt;int&gt; stu(101) , num(101),score(101);int main() &#123; int n , m; cin &gt;&gt; n &gt;&gt; m ; for(int i = 0; i &lt; m ; ++i)&#123;cin &gt;&gt; score[i];&#125; for(int i = 0 ; i &lt; m; ++i)&#123;cin &gt;&gt; num[i] ;&#125; for(int i = 0 ; i&lt;n ; ++i) &#123; for(int j = 0 ; j &lt; m ; ++j) &#123; int temp = 0 ; cin &gt;&gt; temp ; if(temp == num[j]) &#123; stu[i] +=score[j]; &#125; &#125; &#125; for(int i = 0 ; i &lt; n ; ++i)&#123;cout&lt;&lt;stu[i]&lt;&lt;endl;&#125; return 0;&#125; 谢谢访问]]></content>
+      <categories>
+        <category>PAT</category>
+        <category>竞赛</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>PAT</tag>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[1062 最简分数 (20 分)]]></title>
+    <url>%2F2019%2F08%2F18%2F%E6%9C%80%E7%AE%80%E5%88%86%E6%95%B0%2F</url>
+    <content type="text"><![CDATA[题目描述一个分数一般写成两个整数相除的形式：N/M，其中 M 不为0。最简分数是指分子和分母没有公约数的分数表示形式。现给定两个不相等的正分数 N1/M​1和N2/M2，要求你按从小到大的顺序列出它们之间分母为 K 的最简分数 输入格式输入在一行中按 N/M 的格式给出两个正分数，随后是一个正整数分母 K，其间以空格分隔。题目保证给出的所有整数都不超过 1000。 输出格式在一行中按 N/M 的格式列出两个给定分数之间分母为 K 的所有最简分数，按从小到大的顺序，其间以 1 个空格分隔。行首尾不得有多余空格。题目保证至少有 1 个输出。 分析 注意读题，是两个分数之间的以k为分母且最简的分数。 题目有意降低难度，即在题目中告知我们要用最大公约数知识数学——最大公约数与最小公倍数最大公约数 最大公因数，也称最大公约数、最大公因子，指两个或多个整数共有约数中最大的一个。 如果数a能被数b整除，a就叫做b的倍数，b就叫做a的约数。约数和倍数都表示一个整数与另一个整数的关系，不能单独存在。如只能说16是某数的倍数，2是某数的约数，而不能孤立地说16是倍数，2是约数。 最小公倍数 两个或多个整数公有的倍数叫做它们的公倍数，其中除0以外最小的一个公倍数就叫做这几个整数的最小公倍数。 设a,b分别为两个数，ab = a和b的最大公约数 a和b的最小公倍数 参考代码#include &lt;bits/stdc++.h&gt;using namespace std;int GCD(int a,int b)&#123; return a%b?GCD(b,a%b):b;&#125;int main() &#123; int n1, m1, n2, m2, k; int *p, *q; scanf("%d/%d %d/%d %d", &amp;n1, &amp;m1, &amp;n2, &amp;m2, &amp;k); //qujian if(n1*m2 &gt; n2 *m1) &#123; int a ,b ; a = n1 ; b = m1 ; n1 = n2 ; m1 = m2 ; n2 = a ; m2 = b ; &#125; int cnt = 0 ; for(int i = 1 ; i*m2 &lt; k*n2 ; ++i) &#123; if( i * m1 &lt;= k*n1) &#123; continue; &#125; if(GCD(k,i) != 1) &#123; continue; &#125; if(i * m1 &gt; k*n1) &#123; ++cnt; &#125; if(cnt &gt; 1) &#123; cout&lt;&lt;" "; &#125; printf("%d/%d",i,k); &#125; return 0;&#125; 谢谢访问]]></content>
+      <categories>
+        <category>PAT</category>
+        <category>竞赛</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>PAT</tag>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[1063 计算谱半径 (20 分)]]></title>
+    <url>%2F2019%2F08%2F18%2F%E8%AE%A1%E7%AE%97%E8%B0%B1%E5%8D%8A%E5%BE%84%2F</url>
+    <content type="text"><![CDATA[题目描述在数学中，矩阵的“谱半径”是指其特征值的模集合的上确界。换言之，对于给定的 n 个复数空间的特征值 { a1+b1 i,⋯,an+bni }，它们的模为实部与虚部的平方和的开方，而“谱半径”就是最大模。现在给定一些复数空间的特征值，请你计算并输出这些特征值的谱半径。 输入格式输入第一行给出正整数 N（≤ 10 000）是输入的特征值的个数。随后 N 行，每行给出 1 个特征值的实部和虚部，其间以空格分隔。注意：题目保证实部和虚部均为绝对值不超过 1000 的整数。 输出格式在一行中输出谱半径，四舍五入保留小数点后 2 位。 输入样例50 12 0-1 03 30 -3 输出样例4.24``` ### 分析本题极为简单，但让仍然要注意，对于浮点数计算，用double不用float，用最原始的计算方法，尽量不要调用函数。 我刚开始使用了pow()函数，结果有一个测试用例无法通过### 参考代码 include using namespace std ;int main() { int n = 0 ; cin &gt;&gt; n ; float max = 0.00; for(int i = 0 ; i &lt; n ; ++i) { float a,b ,temp; scanf(“%f%f”,&amp;a,&amp;b); temp = sqrt(aa + bb); max = temp &gt; max ? temp : max; } printf(“%0.2f”,max); return 0;}``` 谢谢访问]]></content>
+      <categories>
+        <category>PAT</category>
+        <category>竞赛</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>PAT</tag>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[1064 朋友数 (20 分)]]></title>
+    <url>%2F2019%2F08%2F18%2F%E6%9C%8B%E5%8F%8B%E6%95%B0%2F</url>
+    <content type="text"><![CDATA[题目描述如果两个整数各位数字的和是一样的，则被称为是“朋友数”，而那个公共的和就是它们的“朋友证号”。例如 123 和 51 就是朋友数，因为 1+2+3 = 5+1 = 6，而 6 就是它们的朋友证号。给定一些整数，要求你统计一下它们中有多少个不同的朋友证号。 输入格式输入第一行给出正整数 N。随后一行给出 N 个正整数，数字间以空格分隔。题目保证所有数字小于10的4次方。 输出样例首先第一行输出给定数字中不同的朋友证号的个数；随后一行按递增顺序输出这些朋友证号，数字间隔一个空格，且行末不得有多余空格。 输入样例8123 899 51 998 27 33 36 12 输出样例43 6 9 26 分析此题实质就是给出多个数，求出他们各个位数之和，重复的和算做一个数。当时我还以为至少有两个或两个以上相同的和数才算是朋友数，看来是多虑了。 参考代码#include &lt;bits/stdc++.h&gt;using namespace std;typedef struct&#123; int num = 0 ; bool flag = false ;&#125;stu;int cmp(stu a ,stu b)&#123; return a.num &gt; b.num;&#125;stu s[10000];int main() &#123; int num ,cnt = 0 ,cnts = 0; cin &gt;&gt; num ; for(int i = 0 ; i &lt; num ; ++i) &#123; string m ; cin &gt;&gt; m ; int temp = 0 ; for(unsigned int j = 0 ; j &lt; m.length() ;++j) &#123; temp = temp + m[j] - '0'; &#125; if(s[temp].num == 0) &#123; s[temp].num = temp ; cnt++; &#125; &#125; cout&lt;&lt;cnt&lt;&lt;endl; sort(s,s+10000,cmp); int falh = 0 ; int i = cnt - 1; while(i &gt;= 0) &#123; if(falh != 0) &#123; cout&lt;&lt;" "; &#125; cout&lt;&lt;s[i].num; ++falh; i--; &#125; return 0;&#125; 谢谢访问]]></content>
+      <categories>
+        <category>PAT</category>
+        <category>竞赛</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>PAT</tag>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[1065 单身狗 (25 分)]]></title>
+    <url>%2F2019%2F08%2F17%2F%E5%8D%95%E8%BA%AB%E7%8B%97%2F</url>
+    <content type="text"><![CDATA[题目描述“单身狗”是中文对于单身人士的一种爱称。本题请你从上万人的大型派对中找出落单的客人，以便给予特殊关爱。 输入格式输入第一行给出一个正整数 N（≤ 50 000），是已知夫妻/伴侣的对数；随后 N 行，每行给出一对夫妻/伴侣——为方便起见，每人对应一个 ID 号，为 5 位数字（从 00000 到 99999），ID 间以空格分隔；之后给出一个正整数 M（≤ 10 000），为参加派对的总人数；随后一行给出这 M 位客人的 ID，以空格分隔。题目保证无人重婚或脚踩两条船。 输出格式首先第一行输出落单客人的总人数；随后第二行按 ID 递增顺序列出落单的客人。ID 间用 1 个空格分隔，行的首尾不得有多余空格 输入样例311111 2222233333 4444455555 66666755555 44444 10000 88888 22222 11111 23333 输出样例510000 23333 44444 55555 88888 题目分析 利用vector初始化数组，使数组下标11111的值为22222，数组下标为22222的值为11111，记录有多个有效数组个数cnt 再利用sort()函数，对数组值进行从大到小排序 从cnt-1到0，遍历输出单身狗，实现从小到大输出 利用%05d输出对应格式 参考代码#include &lt;bits/stdc++.h&gt;using namespace std;vector&lt;int&gt; m(100001);vector&lt;int&gt; mm(100001);vector&lt;int&gt; p(100001);bool cmp (int a , int b)&#123; return a &gt; b;&#125;int main() &#123; int num , number; cin &gt;&gt; num ; for(int i = 0 ; i &lt; num ; ++i) &#123; int temp = 0 ; cin &gt;&gt; temp ; cin &gt;&gt; m[temp] ; m[m[temp]] = temp ; &#125; cin &gt;&gt; number ; for(int i = 0 ; i &lt; number ; ++i) &#123; cin &gt;&gt; mm[i] ; &#125; int cnt = 0 ; for(int i = 0 ; i &lt; number ; ++i) &#123; int value = m[mm[i]] ; bool flag = true; for(int j = 0 ; j &lt; number ; j++) &#123; if(value == mm[j]) &#123; flag = false; break; &#125; &#125; if(flag) &#123; p[cnt++] = mm[i]; &#125; &#125; sort(p.begin(),p.end(),cmp); if(cnt == 0) &#123; cout &lt;&lt; cnt; return 0 ; &#125; cout &lt;&lt; cnt &lt;&lt; endl; for(int i = cnt - 1 ; i &gt;= 0; --i) &#123; if(i &lt; cnt - 1) &#123; printf(" "); &#125; printf("%05d",p[i]); &#125; return 0;&#125; 谢谢访问]]></content>
+      <categories>
+        <category>PAT</category>
+        <category>竞赛</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>PAT</tag>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[1066 图像过滤 (15 分)]]></title>
+    <url>%2F2019%2F08%2F17%2F%E5%9B%BE%E5%83%8F%E8%BF%87%E6%BB%A4%2F</url>
+    <content type="text"><![CDATA[题目描述图像过滤是把图像中不重要的像素都染成背景色，使得重要部分被凸显出来。现给定一幅黑白图像，要求你将灰度值位于某指定区间内的所有像素颜色都用一种指定的颜色替换。 输入格式输入在第一行给出一幅图像的分辨率，即两个正整数 M 和 N（0&lt;M,N≤500），另外是待过滤的灰度值区间端点 A 和 B（0≤A&lt;B≤255）、以及指定的替换灰度值。随后 M 行，每行给出 N 个像素点的灰度值，其间以空格分隔。所有灰度值都在 [0, 255] 区间内。 输出格式输出按要求过滤后的图像。即输出 M 行，每行 N 个像素灰度值，每个灰度值占 3 位（例如黑色要显示为 000），其间以一个空格分隔。行首尾不得有多余空格。 输入样例3 5 100 150 03 189 254 101 119150 233 151 99 10088 123 149 0 255 输出样例003 189 254 000 000000 233 151 099 000088 000 000 000 255 题目分析这道题非常简单，在输入过程中及对数字进行修改(降低时间啦)，在区间内的灰度值直接改为替换颜色。注意:用scanf()和printf()完成输入输出，cin或cout会超时哦再者就是注意输出格式哦，003可用%03d格式输出哈 参考代码#include &lt;bits/stdc++.h&gt;using namespace std;int main() &#123; int m , n ,a,b,replace; scanf("%d %d %d %d %d",&amp;m,&amp;n,&amp;a,&amp;b,&amp;replace); int s[505][505]; for(int i = 0 ; i &lt; m ; ++i) &#123; for(int j = 0 ; j &lt; n ;++j) &#123; int temp = 0 ; scanf("%d",&amp;temp); s[i][j] = temp; if(temp &gt;= a &amp;&amp; temp &lt;= b) &#123; s[i][j] = replace ; &#125; if(j &gt; 0) &#123; printf(" "); &#125; printf("%03d",s[i][j]); &#125; printf("\n"); &#125; return 0;&#125; 谢谢访问]]></content>
+      <categories>
+        <category>PAT</category>
+        <category>竞赛</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>PAT</tag>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[1067 试密码 (20分)]]></title>
+    <url>%2F2019%2F08%2F17%2F%E8%AF%95%E5%AF%86%E7%A0%81%2F</url>
+    <content type="text"><![CDATA[题目描述当你试图登录某个系统却忘了密码时，系统一般只会允许你尝试有限多次，当超出允许次数时，账号就会被锁死。本题就请你实现这个小功能。 输入格式输入在第一行给出一个密码（长度不超过 20 的、不包含空格、Tab、回车的非空字符串）和一个正整数 N（≤ 10），分别是正确的密码和系统允许尝试的次数。随后每行给出一个以回车结束的非空字符串，是用户尝试输入的密码。输入保证至少有一次尝试。当读到一行只有单个 # 字符时，输入结束，并且这一行不是用户的输入。 输出格式对用户的每个输入，如果是正确的密码且尝试次数不超过 N，则在一行中输出 Welcome in，并结束程序；如果是错误的，则在一行中按格式输出 Wrong password: 用户输入的错误密码；当错误尝试达到 N 次时，再输出一行 Account locked，并结束程序。 输入样例 1：Correct%pw 3correct%pwCorrect@PWwhatisthepassword!Correct%pw# 输出样例1Wrong password: correct%pwWrong password: Correct@PWWrong password: whatisthepassword!Account locked 输入样例2cool@gplt 3coolman@gpltcoollady@gpltcool@gplttry again# 输出样例2Wrong password: coolman@gpltWrong password: coollady@gpltWelcome in 分析 当输入为正确时，直接输出Welcome in 当用户输入单个#时，直接结束程序 注意如果尝试次数已经达到上线并且输入错误，要输出Wrong password:+id，以及Account locked 两句话 避免使用char数组！ 我的错误在输入字符串(string 类型)时，我没有家getchar()函数，以及getline()函数，导致两个两个测试用例一直是错的 参考代码#include &lt;bits/stdc++.h&gt;using namespace std;int main() &#123; string password; int n = 0 ,cnt = 0; cin &gt;&gt; password ; cin &gt;&gt; n ;getchar(); //敲黑板 while(true) &#123; string temp ; cin &gt;&gt; n ;getchar(); //敲黑板 getline(cin,temp); if(temp == "#") &#123; break; &#125; cnt++; if(temp == password &amp;&amp; cnt &lt;= n) &#123; cout &lt;&lt;"Welcome in"; break; &#125; else if(temp != password &amp;&amp; cnt &lt;= n) &#123; cout &lt;&lt;"Wrong password: "&lt;&lt;temp&lt;&lt;endl; if(cnt == n) &#123; cout&lt;&lt;"Account locked"; break; &#125; &#125; &#125; return 0;&#125; 谢谢访问]]></content>
+      <categories>
+        <category>PAT</category>
+        <category>竞赛</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>PAT</tag>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[c++与竞赛]]></title>
+    <url>%2F2019%2F08%2F12%2Fc-%E4%B8%8E%E7%AB%9E%E8%B5%9B%2F</url>
+    <content type="text"><![CDATA[Why C++ 很多好用函数如reverse()、sort()函数等 C++标准STL、string类等功能大大降低C语言编写代码的代价 C++输入与输出C++的cin用于输入、cout用于输出，但时间比scanf()、printf()高。当使用C++string类时，需要使用cin与cout C++头文件建议一般别写万能头文件，因为有时会因万能头文件而超时#include &lt;bits/stdc++.h&gt; // 万能头文件#include &lt;cmath&gt; // 相当于C语⾔⾥⾯的#include &lt;math.h&gt;#include &lt;cstdio&gt; // 相当于C语⾔⾥⾯的#include &lt;stdio.h&gt;#include &lt;cctype&gt; // 相当于C语⾔⾥⾯的#include &lt;ctype.h&gt;#include &lt;cstring&gt; // 相当于C语⾔⾥⾯的#include &lt;string.h#include &lt;vector&gt; #include &lt;string.h&gt; C++的string使用 无法用scanf()以及printf()处理 string s = "hello world"; // 赋值字符串string s2 = s;string s3 = s + s2; // 字符串拼接直接⽤+号就可以string s4;cin &gt;&gt; s4; // 读⼊字符串cout &lt;&lt; s; // 输出字符串 string空格结束或回车输入，如果字符串中有空格，请用getline() string s; // 定义⼀个空字符串sgetline(cin, s); // 读取⼀⾏的字符串，包括空格cout &lt;&lt; s.length(); // 输出字符串s的⻓度 string其他功能 string 中还有个很常⽤的函数叫做 substr ，作⽤是截取某个字符串中的⼦串，⽤法有两种形式： string s2 = s.substr(4); // 表示从下标4开始⼀直到结束string s3 = s.substr(5, 3); // 表示从下标5开始，3个字符 string的size()或length()函数，可以直接获得string的长度 string的begin()以及end()方法可以用于sort排序 C++ STL之动态数组vector（⽮量）的使⽤ 基本使用方法 #include &lt;iostream&gt;#include &lt;vector&gt; int main() &#123; vector&lt;int&gt; v1; // 定义⼀个vector v1，定义的时候没有分配⼤⼩ cout &lt;&lt; v1.size(); // 输出vector v1的⼤⼩，此处应该为0 return 0; &#125; vector 可以⼀开始不定义⼤⼩，之后⽤ resize ⽅法分配⼤⼩，也可以⼀开始就定义⼤⼩，之后还可以对它插⼊删除动态改变它的⼤⼩；它都能够直接将所有的值初始化为0（不⽤显式地写出来，默认就是所有的元素为0) vector&lt;int&gt; v(10); // 直接定义⻓度为10的int数组，默认这10个元素值都为0// 或者vector&lt;int&gt; v1;v1.resize(8); //先定义⼀个vector变量v1，然后将⻓度resize为8，默认这8个元素都是0// 在定义的时候就可以对vector变量进⾏初始化vector&lt;int&gt; v3(100, 9);// 把100⻓度的数组中所有的值都初始化为9// 访问的时候像数组⼀样直接⽤[]下标访问即可～(也可以⽤迭代器访问，下⾯会讲～)v[1] = 2;cout &lt;&lt; v[0]; vectcor常用方法示例 #include &lt;iostream&gt;#include &lt;vector&gt;using namespace std;int main() &#123; vector&lt;int&gt; a; // 定义的时候不指定vector的⼤⼩ cout &lt;&lt; a.size() &lt;&lt; endl; // 这个时候size是0 for (int i = 0; i &lt; 10; i++) &#123; a.push_back(i); // 在vector a的末尾添加⼀个元素i &#125; cout &lt;&lt; a.size() &lt;&lt; endl; // 此时会发现a的size变成了10 vector&lt;int&gt; b(15); // 定义的时候指定vector的⼤⼩，默认b⾥⾯元素都是0 cout &lt;&lt; b.size() &lt;&lt; endl; for (int i = 0; i &lt; b.size(); i++) &#123; b[i] = 15; &#125; for (int i = 0; i &lt; b.size(); i++) &#123; cout &lt;&lt; b[i] &lt;&lt; " "; &#125; cout &lt;&lt; endl; vector&lt;int&gt; c(20, 2); // 定义的时候指定vector的⼤⼩并把所有的元素赋⼀个指定的值 for (int i = 0; i &lt; c.size(); i++) &#123; cout &lt;&lt; c[i] &lt;&lt; " "; &#125; cout &lt;&lt; endl; for (auto it = c.begin(); it != c.end(); it++) &#123; cout &lt;&lt; *it &lt;&lt; " ";// 使⽤迭代器的⽅式访问vector &#125; return 0; &#125; 容器 vector 、 set 、 map 这些遍历的时候都是使⽤迭代器访问的。c.begin() 是⼀个指针，指向容器的第⼀个元素， c.end() 指向容器的最后⼀个元素的后⼀个位置，所以迭代器指针 it 的for循环判断条件是 it != c.end() 2019.8.18更新C++ STL之集合set的使⽤ set是集合，一个set里面的各个元素是各不相同的，而且set会按照元素从大到小排序(既能保证元素不重复，又能从大到小排序) set的常用用法#include &lt;iostream&gt;#include &lt;set&gt;using namespace std;int main()&#123; set&lt;int&gt; s ; //定义一个空set集合s s.insert(1); //向集合s里插入一个1 cout&lt;&lt;*(s.begin()) &lt;&lt; endl; //输出集合的第一个元素 for(int i = 0 ; i &lt; 6 ; i) &#123; s.insert(i); //向集合s插入i &#125; for(auto it = s.begin() ; it != s.end() ; it++) &#123; //用迭代器遍历集合中的每一个元素 cout&lt;&lt;*it&lt;&lt;" "; &#125; cout&lt;&lt;endl&lt;&lt;(s.find(2) != s.end()) &lt;&lt;endl; //查找集合s中的值，如果结果等于s.end()表示为未找到(因为s.end()表示s的最后一个元素的下一个所在位置) cout&lt;&lt;(s.find(10) != s.end()) &lt;&lt; endl ;//s.find(10) != s.end()表示能找到10这个元素 s.erase(1); //删除集合s中的1这个元素 cout&lt;&lt;(s.find(1) != s.end()) &lt;&lt; end; //这时1将无法找到 return 0 ; &#125; 未完待续]]></content>
+      <categories>
+        <category>C转C++教程</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>竞赛</tag>
+        <tag>PAT</tag>
+        <tag>蓝桥杯</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[大学半里程总结]]></title>
+    <url>%2F2019%2F08%2F11%2F%E5%A4%A7%E5%AD%A6%E5%8D%8A%E9%87%8C%E7%A8%8B%E6%80%BB%E7%BB%93%2F</url>
+    <content type="text"><![CDATA[那个晚上时光一转，我又回到两年前。2017年六月高考出分的那个晚上，注定是终身难忘的一刻。失意雅不惬，见花如见仇。 一切都定格在513，高考的失误，让我与原本打算要上的全国重点学校失之交臂。也许，天意难违，我考出历次模拟最差分数。 这一天注定是河北地质大学，我唯能上的几所省内本一学校。还依稀记得是学院组织几个大三学长学姐给我们介绍了信工试点班(计算机科学与技术专业)。从小到大，我都是一个很要强的人。从初中年年的年级第一，到高中三年学习成绩的迅速走下，再到高考分数的雪崩式崩溃。我的内心早就已经五味杂陈。为了能在大学”翻身”—我毅然决然地选择进试点班。 第一年进入大学后，我活得从来没有的自由。从小长大养成的学习习惯迅速被丢弃，大一上学期，在半玩半学的悠闲日子中度过。绩点:2.9到了第二学期，我便重新打起精神，自觉上自习。提前学习C语言知识，在期末考出了3.5的高绩点。 那时思考大一结束了，我感觉自己所学的不过一些最基本的知识，考试不过是老师有意降低了出题难度。我感到一种空虚。 第二年大二，校本部。我亲眼目睹了很多同学已经变了，降低了对自己的要求。“我不能，我还要翻身！”大二上学期学的很是不好，来到本部后，老师知道试点班作业很多，于是就基本上不给我们留作业。这直接导致我自制力大幅度降低，特别是体现在数据结构考试上，我的分数很差。绩点3.2下学期，我开始每天晚上自觉去上自习，自觉做课本后面的习题。还好除了基本科目没能实现目标分数外，总体上过得去。 此时思考大二已结束，大三意味着2021毕业已近在咫尺，what should I do ?试点班已不再像以前在考研面试占优势(因为我们这届的能力已经大不如往届)坐以待毙？这要从大二下学期那个三月说起:师范大学举办了“云淮杯”竞赛，我发现我连师大大一的学生编程能力都不如。数据结构白学了?连一个图的基本遍历都写不出来???四月底学校组织的河北省程序设计大赛选拔，我又失败了。“我不是一个能靠幸运为助力，获得成功的人，永远都不可能是。” 2019年度计划面对自己的处境，我早已为自己在2019年对自己提出要求，“五个新”。 新方法重构学习方法，两个重点：课上与课下。课上: 逐步将听课效率提高到最佳课下：在保证自制力的情况下，全面提高学习效率。 新途径确定通过程序竞赛带动计算机学科各方面发展，快速、高效地提高编程综合能力。，为今后考研工作提供一个亮点。 新标准坚持努力考研，做提前准备，目标最低为省外211大学英语要600分通过六级程序竞赛的PAT甲级要在80分以上，蓝桥杯要在二等或二等奖以上在日常学习中，全面实现自控，养好良好的生活学习习惯。在成绩上，要排到专业前3名以内 新锻炼2019.6成功当选英语社团主席，通过这一机会，全面提高与他人交流能力以及处理日常事务的能力。 新时代实现学期全部学科绩点4.0，灵活、熟练掌握各科学习知识，将时间化整为零，实现各科高效学习 在行动 与7月正式启动PAT竞赛训练 与8月初启动英语考研语法与单词背诵 为未来，不辱使命谢谢访问]]></content>
+      <categories>
+        <category>生活记录</category>
+      </categories>
+      <tags>
+        <tag>生活记录</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[C++第四周plus]]></title>
+    <url>%2F2019%2F08%2F10%2FC-%E7%AC%AC%E5%9B%9B%E5%91%A8plus%2F</url>
+    <content type="text"><![CDATA[C++面对对象程序设计第二节静态成员和静态成员函数 定义与java相同，这里只讨论其独特性质 静态成员函数访问的四种方式 类名+成员名 A :: Print(); 对象名.成员名 A m;m.Print(); 指针-&gt;成员名 A *p;p-&gt;Print(); 引用 A &amp;p;p.Print(); 静态成员变量本质是全局变量 静态成员变量必须在定义的文件中对其进行初始化或赋值，否则编译通过，链接不通过。 class A&#123; static int m ;&#125;;int A :: m = 0 ; //赋值 静态成员函数内可以以访问非静态成员函数以及非静态变量 成员对象与友元类 成员对象:第一个类的成员变量是另一个类的对象 包含对象的类叫做封闭类 封闭类的构造函数形式类名+构造函数(参数表):成员变量(参数表),成员变量2(参数表)… //成员对象与封闭类class examples&#123; public: example a ; int b ; int c ; int e ; examples(int m ,int n) : a(m-n,m+n,m*n),e(m)&#123;&#125;; &#125;;//使用examples p (1,2); 对于封闭类构造与析构顺序成员对象:先构造后析构封闭对象:后构造先析构 友元类 友元函数 友元函数可以访问类的私有成员 将一个类的成员函数定义为另一个友元 友元类A是B的友元类，A的成员函数可以访问B的私有成员 class B&#123; private: int a ; friend class A ;&#125;;class A&#123; B m ; void Print() &#123; cout &lt;&lt; m.a &lt;&lt; endl ; &#125;&#125;; 友元类不能传递，不能继承 this 指针 非静态成员函数中可以直接使用this指针，代表指针该函数体用的对象指针 class A&#123; int i ; public: void Hello &#123;cout &lt;&lt; "hello" &lt;&lt; endl;&#125; //等价于 void Hello (A*this) &#123;cout &lt;&lt; "hello" &lt;&lt; endl;&#125;&#125;;int main()&#123; A* p = NULL; p-&gt;Hello(); //输出Hello&#125; this函数不能作用静态变量以及全局变量。可以作用与const变量 常量成员函数 定义方法 class A&#123; void Print(const a) const &#123; cout &lt;&lt; endl ;&#125;&#125;; 常量成员不能调用非常量成员函数 常量成员函数不能调用非常量成员变量 谢谢访问]]></content>
+      <categories>
+        <category>旗舰学科</category>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>旗舰学科</tag>
+        <tag>计算机语言</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[C++第四周]]></title>
+    <url>%2F2019%2F08%2F10%2FC%2B%2B%E7%AC%AC%E5%9B%9B%E5%91%A8%2F</url>
+    <content type="text"><![CDATA[C++面对对象程序设计第一节类的相关知识 与java不同，类的最后}需要加分号 成员函数外部描述方式 int CRectangle :: Area()&#123; return weight*high;&#125; 注意：如果在类外写成员函数，需要在类定义中声明class A&#123; int a ,b; void Print();&#125;;void A ::Print()&#123; cout &lt;&lt; endl;&#125; 类的可访问范围与java不同的是，如果不写范围，默认为private 设置私有成员机制 —隐藏 设置私有成员目的 —强制对成员进行隐藏类的相关函数内联成员函数定义的两种方式: line + 成员函数 整个函数出现在类定义外部重载成员函数 定义: 成员函数可带缺省值 注意！！！:使用缺省函数注意避免函数重载的歧义class A&#123; void value(int val = 0 ) &#123;x = val ;&#125; void value() &#123;cout &lt;&lt; endl ;&#125; //歧义&#125;; A m ; m.value(); //编译器不知道要调用哪个成员函数 复制(拷贝)构造函数 若没有复制构造函数，则默认生成 complex c1 ; //拷贝(初始化语句，并非赋值语句)complex c2 = c1 ;complex c3(c2);//赋值语句c3 = c2 复制构造函数的参数必须是对象的引用，且参数只有一个、没有返回值 complex (complex &amp; a) //正确complex (complex a) //错误 复制构造函数使用的三种情况 初始化新的对象 函数调用时输入形参，形参到实参其实是自已利用复制构造函数自己有生成了并初始化了一个新的对象 函数返回一个对象，其实是自已利用复制构造函数自己有生成了并初始化了一个新的对象，并将其返回 注意问题如果复制构造函数是自己写的，那么可能就与上面三种情况结果不同(不一定返回对象，对象性质不一定相同等等)强制类型转换函数 目的：实现类的自动转换 特点 只有一个参数 并非复制构造函数 实例class A&#123; public: double real ,imag; complex(int i)u; &#123; cout &lt;&lt; "intconstructor called"&lt;&lt;endl; real = 2 ; imag = 0; &#125; complex (double r , double i) &#123;real = r ; imag = &#125;&#125;;int main()&#123; complex c1(7,8); complex c2 = c1; c1 = 9 ; //12以及9被自动转换成一个临时的complex对象&#125; 2019.8.10更新 析构函数 成员函数中的一种，名字与类名相同，没有参数也没有返回值，一个类最多只有一个析构函数 对象消亡时，自动被调用 在析构函数加入delete运算符，可以释放new申请的空间 对象数组的每个元素的析构函数都会被调用 注意: 语句块结束后，自动调用析构函数 函数结束，自动调用析构函数 谢谢访问]]></content>
+      <categories>
+        <category>旗舰学科</category>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>旗舰学科</tag>
+        <tag>计算机语言</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[摘录]]></title>
+    <url>%2F2019%2F08%2F09%2F%E6%91%98%E5%BD%95%2F</url>
+    <content type="text"><![CDATA[愿你三冬暖，愿你春不寒。愿你天黑有灯，下雨有伞。愿你路上有良人相伴，愿你此生尽兴、赤诚善良。 愿时光能缓，愿故人不散。愿有人陪你颠沛流离，愿你惦念的人能和你道早安，愿你独闯的日子里不觉得孤单。愿你人间走一遭，圆满了三界六道，看透了是非善恶。从此福来心至，皆是逍遥。]]></content>
+      <categories>
+        <category>生活记录</category>
+      </categories>
+      <tags>
+        <tag>生活记录</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[C++第三周]]></title>
+    <url>%2F2019%2F08%2F09%2FC-%E7%AC%AC%E4%B8%89%E5%91%A8%2F</url>
+    <content type="text"><![CDATA[第一节 const常量使用 定义常量 const int m = 3 ; 定义常量指针 const int* m ; 不可以通过常量指针修改其指向的内容，但可以改动其指向内容的值 定义常引用 const int&amp; m; 不能通过常引用修改其指向的变量 第二节 动态内存的分配 用法一:分配一个空间 int *p = new int; 用法二:分配一个数组 int* p = new int[N]; 分配一片大小为N*sizeof(int)的空间，并将其起始地址返回N可以为变量,new的返回值为地址 用delete运算符释放new运算符申请的内存//申请 int*p = new int ;int*s = new int[n];//释放delete p;delete[] s; 第三节 C++函数 内联函数当函数语句较短多次调用时，采用内联函数，可以降低有函数调用带来的消耗 inline int func()&#123; int m = 0 ; return 0 ;&#125; 函数重载函数名字相同，参数必须不同。 //eg1int max(int a ,int b);int max(int a ,int b ,int c);//eg2(常量成员函数)int value(int a ,int b) const &#123;return 0 ;&#125;int value(int a ,int b) &#123;return 0 ;&#125; 函数缺省参数在C++中，定义函数的时候可以让最右边的连续若干个参数有缺省值。则调用函数的时候，若相应位置不写参数，参数值就是缺省值。 void fun(int a ,int b ,int x3 = 3 )&#123;&#125;fun(10); //等效于fun(10,2,3)fun(10,12); //等效于(10,12,6) 作用:提高了函数的可扩展性。 谢谢访问]]></content>
+      <categories>
+        <category>旗舰学科</category>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>旗舰学科</tag>
+        <tag>计算机语言</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[数据结构第一周]]></title>
+    <url>%2F2019%2F07%2F20%2F%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AC%AC%E4%B8%80%E5%91%A8%2F</url>
+    <content type="text"><![CDATA[线性表 定义:线性表简称表，包含零个或多个元素的有序序列 属性 表目 == 记录 索引 == 下标 二元组B = (K,R) , K = {a0,a1,a2,…an-1} R = {r} 具有反对称性 , a1是a2的(直接)前驱，a2是a1的(直接)后继 特点 均匀性: 元素类型相同 有序性 线性结构分类 简单:线性表、栈、队列、散列表 难：广义表，多维数组、文件 访问方式 直接访问 间接访问 目录访问 (线性)表的三个方面 逻辑结构 存储结构 运算 线性表的逻辑结构 属性：长度、表头、表尾、位置 有存储结构可分为 顺序表(是由数组实现的) 链表 按操作可分为 栈 队列 按运算清除操作、插入操作、删除操作等 顺序表 亦称向量，由数组实现 特性 元素相同 顺序、连续储存 元素地址公式 Loc(i) = Loc(i0) + c * i 其中 (c = sizeof(ELEM)); 顺序表插入与删除的算法分析 插入移动次数: n - i 删除移动次数：n - i - 1 未完待续 谢谢访问]]></content>
+      <categories>
+        <category>旗舰学科</category>
+        <category>数据结构</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>旗舰学科</tag>
+        <tag>算法</tag>
+        <tag>数据结构</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[C++第二周]]></title>
+    <url>%2F2019%2F07%2F17%2FC-%E7%AC%AC%E4%BA%8C%E5%91%A8%2F</url>
+    <content type="text"><![CDATA[第一节 相关函数补充C++ STL中的Binary search（二分查找）头文件#include &lt;algorithm&gt; binary_search(参数一、参数二、参三) 函数模板binary_search(arr[],arr[]+size , indx) 参数说明(1)arr[]:数组首地址(2)size:数组元素个数(3)indx:需要查找的值 函数功能 在数组以二分法检索的方式查找，若在数组(要求数组元素非递减)中找到indx元素则返回true，否则false lower_bound(参数一、参数二、参三) 函数模板 lower_bound(arr[],arr[]+size , indx) 参数说明(1)arr[]:数组首地址(2)size:数组元素个数(3)indx:需要查找的值 函数功能 函数lower_bound()在first和last中的前闭后开区间进行二分查找，返回大于或等于val的第一个元素位置(注意是地址)。如果所有元素都小于val，则返回last的位置 upper_bound(参数一、参数二、参三) 函数模板 upper_bound(arr[],arr[]+size , indx) 参数说明(1)arr[]:数组首地址(2)size:数组元素个数(3)indx:需要查找的值 函数功能 函数upper_bound()返回的在前闭后开区间查找的关键字的上界，返回大于val的第一个元素位置 谢谢访问]]></content>
+      <categories>
+        <category>旗舰学科</category>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>旗舰学科</tag>
+        <tag>计算机语言</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[洛谷p1015]]></title>
+    <url>%2F2019%2F07%2F17%2F%E6%B4%9B%E8%B0%B7p1015%2F</url>
+    <content type="text"><![CDATA[洛谷p1015题目描述若一个数（首位不为零）从左向右读与从右向左读都一样，我们就将其称之为回文数。例如：给定一个十进制数56，将56加65（即把5656从右向左读），得到121是一个回文数.又如：对于十进制数87：STEP1：87+78 = 16STEP2：165+561 = 726STEP3：726+627 = 1353STEP4：1353+3531 = 4884在这里的一步是指进行了一次N进制的加法，上例最少用了4步得到回文数4884.写一个程序，给定一个N(2 &lt;= N &lt;= 10,N =16 )进制数M(100位之内)，求最少经过几步可以得到回文数。如果在30步以内（包含30步）不可能得到回文数，则输出Impossible! 输入输出格式输入格式两行，分别是N,M. 输出格式STEP=ans 题目分析 首先此类题目设计数字的反转，不妨想到用字符串进行操作更方便。同时，C++的reverse()函数，方便了字符串的反转 其次，我们应学会高效率的进制转换 通过计数器进行STEP计数，我们便可求解代码示例#include &lt;iostream&gt;#include &lt;cstdio&gt;#include &lt;string&gt;using namespace std;unsigned long long n=0,k,len,nex;string nn;bool wow(unsigned long long a)&#123; unsigned long long s=0; for (unsigned long long i=a;i;i/=k) //第三个for循环 s=s*k+i%k; nex=s+a; return s==a;&#125;unsigned long long ch(char a)&#123; if (a&gt;='0' &amp;&amp; a&lt;='9') return a-'0'; return a-'A'+10;&#125;int main()&#123; cin&gt;&gt;k&gt;&gt;nn;len=nn.size(); for (int i=0;i&lt;len;i++) //第一个for循环 n=n*k+ch(nn[i]); unsigned long long step; for (step=0;!wow(n) &amp;&amp; step&lt;=30;step++) //第二个for循环 n=nex; if (step&lt;=30) cout&lt;&lt;"STEP="&lt;&lt;step&lt;&lt;endl; else cout&lt;&lt;"Impossible!"; return 0;&#125; 代码分析 首先，数字以字符串输入，通过第一个for循环，可直接将任意进制转换为十进制(大大降低了用栈求进制的麻烦).这里涉及到一个数学知识，即秦久韶公式，大家可以搜索了解下 第三个for循环更加精巧.通过一个for循环，将一个十进制数变成相应的反转后k进制数，再转换为十进制数。 wow函数内部通过比较反转前后的k进制数的十进制进行比较，如果相等，则返回true，若不相等，则再次调用wow函数，直到为true或STEP &gt; 30 数字字符串转化为数字.ch函数巧妙地运用ASDII码的特性，将单个字符转化为单个数字 追加学习字符串反转 使用string.h中的strrev函数。 char s[20] = "hello";strrev(s);cout&lt;&lt;s&lt;&lt;endl; //输出为 olleh 使用algorithm中的reverse函数 string s[20] = "hello";reverse(s.begin(),s.end()); //也可写成reverse(s)cout&lt;&lt;s&lt;&lt;endl; //输出为 olleh 字符数字转数字利用ASDII码特性，字符数字 - ‘0’ 即为对应数字，字母 - ‘A’ + 10 即为9以上对应数字 unsigned long long ch(char a)&#123; if (a&gt;='0' &amp;&amp; a&lt;='9') return a-'0'; return a-'A'+10;&#125; 进制转换 利用C++栈转换 #include &lt;iostream&gt; #include &lt;stack&gt; using namespace std; int main() &#123;int b,n,e;cout &lt;&lt; "请输入数制转换的进制及数值："&lt;&lt;endl;cin &gt;&gt; b &gt;&gt; n;cout &lt;&lt; "数值" &lt;&lt; n &lt;&lt; "的" &lt;&lt; b &lt;&lt; "进制为：" &lt;&lt; endl;stack&lt;int&gt;stk; //重点while (n)&#123; stk.push(n%b); n /= b;&#125;while (!stk.empty())&#123; cout &lt;&lt; stk.top(); stk.pop();&#125;return 0; &#125; 利用秦九韶公式转换(仅仅适用于K进制转十进制) for (int i=0;i&lt;len;i++) //第一个for循环 n=n*k+ch(nn[i]); C++栈的使用说明 使用栈，要先包含头文件： #include &lt;stack&gt; 定义栈，以如下形式实现： stack&lt;Type&gt; s; //其中Type为数据类型（如 int，float,char等）。 栈的主要操作 s.push(S); //将S压入栈顶 s.pop(); //删除栈顶的元素，但不会返回 s.top(); //返回栈顶的元素，但不会删除 s.size(); //返回栈中元素的个数 s.empty(); //检查栈是否为空，如果为空返回true，否则返回false 谢谢访问]]></content>
+      <categories>
+        <category>蓝桥杯周练</category>
+        <category>蓝桥杯周练之序周</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>竞赛</tag>
+        <tag>算法</tag>
+        <tag>数据结构</tag>
+        <tag>洛谷</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[洛谷P1012]]></title>
+    <url>%2F2019%2F07%2F16%2F%E6%B4%9B%E8%B0%B7P1012%2F</url>
+    <content type="text"><![CDATA[洛谷P1012题目描述设有n个正整数(n≤20)，将它们联接成一排，组成一个最大的多位整数。例如：n=3时，3个整数13,312,343联接成的最大整数为：34331213又如：n=4时，4个整77,13,4,246联接成的最大整数为：7424613 输入输出格式输入格式 ：第一行，一个正整数n。第二行，n个正整数。 输出格式：一个正整数，表示最大的整数 输入输出样例输入313 312 343 输出34331213 题解本题涉及到数字的拼接，显然是考字符串的使用代码如下#include&lt;bits/stdc++.h&gt; //万能头文件using namespace std;string a[21]; //比较函数 bool cmp(string a , string b) &#123; return a + b &gt; b +a ; // a + b 就是a接在b的后面 &#125;int main()&#123; int n = 0 ; cin &gt;&gt; n ; for(int i = 1 ; i &lt;= n ; i++) cin &gt;&gt; a[i]; //C++的sort函数 sort(a+1,a+n+1,cmp); for(int i = 1 ; i &lt;= n ; i++) cout &lt;&lt; a[i]; return 0;&#125; 代码解析之万能头文件#include&lt;bits/stdc++.h&gt; 代码解析之C++Sort函数sort函数有三个参数(第三个参数定义排序规则，可有可无). 第一个参数为排序的起始位置 第二个参数为排序的终止位置 第三个参数默认不写为升序排序，若自定义，则需要构造排序规则函数，且第三个参数直接收bool类型 代码解析之C++string类 string是指字符串数组，相当于char[num]; String有如下赋值方法 string str1 = "first"; //拷贝初始化 string str2("hello"); //直接初始化 直接初始化:使用普通的函数匹配即可完成初始化。也就是说只是直接调用类的构造函数或拷贝构造函数就能完成初始化的就是直接初始化; 拷贝初始化:将对象拷贝到正在创建的对象当中，如果需要还要进行类型转换。这里也就是间接调用拷贝构造函数，当然大部分情况调用拷贝构造函数，有时也可能调用移动构造函数。 常用函数 string m ; string s ;m.begin(); //字符数组的起始地址m.end(); //字符数组的终止地址m.append(s) //字符串拼接 string 拼接的几种方法 1、str += “a”， str =str+ “a” 效率差距str =str+ “a”加的运算产生的是一个新的对象，再把结果返回;而str += “a” 涉及到的应该是对象的引用，操作之后直接返回引用，避免了产生新的对象。 使用append(); void main(void) &#123; string s1("hello"); string s2("word"); s1.append(s2); cout &lt;&lt; s1 ; &#125;//输出结果hello word 直接拼接 string s1 ;string s2 ;s2 = s2 + s1 ; //s1拼接在s2后面 字符串比较规则比较的时候，从字符串左边开始，一次比较每个字符，直接出现差异、或者其中一个串结束为止.比如ABC与ACDE比较，第一个字符相同，继续比较第二个字符，由于第二个字符是后面一个串大，所以不再继续比较，结果就是后面个串大.应用以上原理，用字符串解决洛谷p1012再方便不过了 谢谢访问]]></content>
+      <categories>
+        <category>蓝桥杯周练</category>
+        <category>蓝桥杯周练之序周</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>竞赛</tag>
+        <tag>算法</tag>
+        <tag>数据结构</tag>
+        <tag>洛谷</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[算法第一周]]></title>
+    <url>%2F2019%2F07%2F14%2F%E7%AE%97%E6%B3%95%E7%AC%AC%E4%B8%80%E5%91%A8%2F</url>
+    <content type="text"><![CDATA[枚举法看似很low，其实很强大！！！ 枚举相关概念及性质 应用范围:基于已有知识进行答案猜测的思想 枚举思想: 猜测 使用枚举需确定三个问题 问题一 :确定解空间，建立简洁的数学模型(可能出现的情况的集合) 问题二 :利用所学知识以及题目中的条件减少变量取值范围 问题三 :依据题目确定正确的搜索顺序(搜索空间的遍历顺序要与模型中条件表达式一致) 枚举法举例问题:求小于N的最大素数 问题一解空间为:(1)正整数(2)值大于2(3)n不能被[2,n)中任意一个素数整除(注意不是n不能被[2,n)中任意一个整数整除) 问题二优化解空间:除2以外的所有偶数，一定不是素数。即{2,2 i+1 |1&lt;=i, 2 i+1 &lt; n } 问题三对{2,2 i+1 |1&lt;=i, 2 i+1 &lt; n} 按照从小到大的顺序 请尝试如下题目百鸡问题鸡翁一值钱五, 鸡母一值钱三, 鸡雏三值钱一百钱买百鸡, 问鸡翁, 鸡母, 鸡雏各几何 2019-7-17更新 题解: 先构造可能的解的集合 S={(X,Y,Z)|0&lt;=X,Y,Z&lt;=100}X, Y, Z分别代表买公鸡, 母鸡和小鸡的只数 然后验证条件X+Y+Z=100, 5X+3Y+Z/3=100 复杂度: O(100^2) 伪代码 for (int x=0; x&lt;=100; x++) for (int y=0 ; y&lt;=100-x; y++)&#123; z = 100 - x - y; if (z % 3==0) then if (5*x+3*y+z/3==100) then (x,y,z) is solution&#125; 谢谢访问]]></content>
+      <categories>
+        <category>旗舰学科</category>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>旗舰学科</tag>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[C++第一周]]></title>
+    <url>%2F2019%2F07%2F13%2FC-%E7%AC%AC%E4%B8%80%E5%91%A8%2F</url>
+    <content type="text"><![CDATA[第一节 函数指针与命令行参数函数指针1.格式类型名 + (*指针变量名) + (参数一类型、参数二类型….);示例#include &lt;stdio.h&gt; void PrintMin(int a,int b) &#123; if( a&lt;b ) &#123; printf("%d",a); &#125; else &#123; printf("%d",b); &#125; &#125; int main() &#123; void (* pf)(int ,int); int x = 4, y = 5; pf = PrintMin; pf(x,y); return 0; &#125; 2.C++的qsort()函数使用qsort(起始地址,长度,每个元素字节大小,排序规则)；示例如下:#include &lt;stdio.h&gt; #include &lt;stdlib.h&gt; int MyCompare( const void * elem1, const void * elem2 )&#123; unsigned int * p1, * p2; p1 = (unsigned int *) elem1; // “* elem1” 非法 p2 = (unsigned int *) elem2; // “* elem2” 非法 return (* p1 % 10) - (* p2 % 10 );&#125;#define NUM 5int main()&#123; unsigned int an[NUM] = &#123; 8,123,11,10,4 &#125;; qsort( an,NUM,sizeof(unsigned int), MyCompare); for( int i = 0;i &lt; NUM; i ++ ) printf("%d ",an[i]); return 0;&#125; 命令行参数1.格式:int main(int argc , char* argv[]) 其中，argc为参数个数，argv为char**类型2.命令行参数以空格或回车为一个参数的结束，若参数包含回车，请用” “包裹起来 第二节 位运算&amp;（与）运算eg: 21 &amp; 18 = 16即这个数的二进制数对应位均为1时，则该位为1，其余任何时刻均为0应用: 某些位清零，其他位不变 获取变量中的某一位 |(或)运算eg: 21 | 18 = 23 将某些位置置为1，其他不变 ^(异或)eg: 21 ^ 18 = 23规律:若 a ^ b = c则有：c ^ a = b ;c ^ b = a ; ~(取反)运算&lt;&lt;(左运算)eg: 9 &lt;&lt; 4 = 1449的二进制编码: 0000 1001左移四位:1001 0000 左移一位乘2，左移n位乘2的n次方 &gt;&gt;(右移)运算 对于有符号的数，前面补充的数为符号对应的数 对于无符号的数，前面补0 右移一位除2，右移n位除以2的n次方 如果除不尽，则向较小的整数靠近 第三节 引用 类型名 &amp; 引用名 = 某变量名 注意一下几个规则 定义引用时必须初始化成某一 变量 一旦初始化，不能再引用其他变量，”=”仅仅时赋值 只能引用变量 变量可以做函数返回值 const &amp; r 为常引用，不能通过该引用改变被引用的变量值变量做函数返回值示例 int n = 4;int &amp; SetValue()&#123; return n; &#125;int main()&#123; SetValue() = 40; cout &lt;&lt; n; return 0;&#125; //输出： 40 谢谢访问]]></content>
+      <categories>
+        <category>旗舰学科</category>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>旗舰学科</tag>
+        <tag>计算机语言</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[数据结构前言]]></title>
+    <url>%2F2019%2F07%2F13%2F%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%89%8D%E8%A8%80%2F</url>
+    <content type="text"><![CDATA[数据结构认识数据结构组成数据结构 = 逻辑结构 + 储存结构 + 运算 逻辑结构组成(1)线性结构: 表(List)、栈(Stack)、队列(queue)、串(String)(2)非线性结构: 树、图(3)逻辑结构包含关系 线性表 $\subseteq$ 二叉树 $\subseteq$ 树 $\subseteq$ 图 储存结构(1)逻辑结构到物理存储的映射(2)常见储存结构：顺序结构链表索引散列 抽象数据类型先定义逻辑结构(数据对象及其关系)，再定义算法(数据操作) 数据结构学习需用到的C++知识补充类(1)类中的变量: 构成数据结构(2)类中的函数: 封装数据结构(3)如果成员变量没给出适用范围，默认为private 类函数的外部声明方法函数返回值类型 + 类名 + :: + 函数名(参数1，参数2….) C++函数模板template &lt;typrname T&gt;void print (const T &amp; left , const T &amp; right )&#123; //语句&#125;//使用print&lt;int&gt;(25,30); 谢谢访问]]></content>
+      <categories>
+        <category>旗舰学科</category>
+        <category>数据结构</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>旗舰学科</tag>
+        <tag>算法</tag>
+        <tag>数据结构</tag>
+      </tags>
+  </entry>
+</search>
