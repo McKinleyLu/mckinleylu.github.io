@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[文献讲座报告]]></title>
+    <url>%2F2019%2F08%2F26%2F%E6%96%87%E7%8C%AE%E8%AE%B2%E5%BA%A7%E6%8A%A5%E5%91%8A%2F</url>
+    <content type="text"><![CDATA[搜索方法搜索方法分为八个步骤 分析问题，确定你要搜索的内容选择适当的搜索工具 Google Bing Baidu 提取检索词，简化搜索范围构造检索式 如果在某一指定网站上搜索，使用如下格式 关键字+site+:+网站url效果如下 搜索关键字文件格式，关键字+空格+filetype+空格+格式(如pdf，word等等)，效果如下 如果你无法使用外网搜索引擎，可以使用如下格式去除广告 关键字+空格-广告-推广(特别是针对百度) 进行检索这里以河北地质大学图书馆为例河北地质大学图书馆我们在读者服务栏中点击“书刊目录查询”，接下来，我们再点击网页栏中的分类浏览，这样就可以根据自己的需求，寻找相应图书，效果如下 我们看到命中数有33947，如果只进行关键字搜索，可能就只有几本书。 筛选检索内容我们通过对论文引用次数进行排序，选择引用率高的，绝大多数情况下是比较好的论文 调整检索策略如果搜索的内容不尽人意，我们可以通过换关键字等方法，提高搜索效率 寻找高质量期刊以及下载方法高质量期刊搜索网站 国内 中国知网 万方数据 国外 springer sciencedirect google scholar 下载方法 国内如果你们学校没有买知网等帐号的话，那么你只能自己花钱买了2333~目前没有这里没有什么方法 国外 对于springer以及sciencedirect网站的期刊，我们可以通过在google商店(当然一可以在这里，不过网页版经常会很慢emmmmm，sci-hub,网页版不做过多介绍)里安装sci-hub插件，然后复制每一篇期刊的dos码或者示例如下首先复制文章dos码，如下图 之后打开sci-hub插件，如下图 插件会自动识别粘贴板的dos码，然后按左边的save就可以直接下载啦 对于有些朋友无法使用外网，可以现在百度下载谷歌浏览器，然后在谷歌商店安装以下插件，一切就ok啦,按照顺序安装 (首先安装chrome浏览器)(1)谷歌访问助手1(2)谷歌访问助手2(3) 谷歌学术(4)sci-hub 大功告成，再也不怕查不到东西喽 ~///(^v^)\\~ 谢谢访问]]></content>
+      <categories>
+        <category>论文与搜索方法</category>
+      </categories>
+      <tags>
+        <tag>论文</tag>
+        <tag>讲座</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[数字三角形]]></title>
     <url>%2F2019%2F08%2F23%2F%E6%95%B0%E5%AD%97%E4%B8%89%E8%A7%92%E5%BD%A2%2F</url>
     <content type="text"><![CDATA[题目描述 图1显示了一个数字三角形。编写一个程序，计算从顶部开始到底部某处的路径上传递的最大数字总和。每个步骤可以沿对角线向下滑动，也可以沿斜向下滑动到右侧。 输入您的程序是从标准输入读取。第一行包含一个整数N：三角形中的行数。以下N行描述了三角形的数据。三角形中的行数大于 1但小于等于 100.三角形中的数字全部为整数，介于0到99之间。 输出你的程序是写入标准输出。最高总和写为整数。 输入样例573 88 1 0 2 7 4 44 5 2 6 5 输出样例30 分析分析1通过分析输入样式，我们观察到，一个数去加的下一行对应的列以及下一行j+1列。故这道题可以用递归求解? 递归参数:一个数的横纵坐标 约束条件:当函数行数等于最大行数N代码如下 #include &lt;bits/stdc++.h&gt;using namespace std;//递归程序const int M = 1000;int d[M+10][M+10];int n = 0 ;int maxs(int i , int j)&#123; if(i == n) &#123; return d[i][j]; &#125; else &#123; int a = maxs(i+1,j); int b = maxs(i+i,j+1); if(a &gt; b)&#123; return a + d[i][j];&#125; else &#123; return b + d[i][j];&#125; &#125;&#125;int main() &#123; int n = 0 ; cin &gt;&gt; n ; for(int i = 0 ; i &lt; n ; ++i) for(int j = 0 ; j &lt; i ; ++j) &#123; cin &gt;&gt; d[i][j]; &#125; cout&lt;&lt;maxs(1,1); return 0;&#125; 答案是否定的，因为你会发现从第三行开始，中间的因为递归，全部被重复计算多次，如果当数字三角型足够大时，题目肯定超时。 分析2分析1的递归显然是不能用了。但我们设一个二维数组，将算过的值保存起来，避免二次或多次计算。以下是记忆型动规的代码 const int M = 1000;int d[M+10][M+10];int n = 0 ;int Max_Array[M+10][M+10];int maxs(int i , int j)&#123; if(i == n ) &#123; return d[i][j]; &#125; else &#123; if(Max_Array[i+1][j] == -1 )&#123;Max_Array[i+1][j] = maxs(i+1,j);&#125; if(Max_Array[i+1][j+1] == -1)&#123;Max_Array[i+1][j+1] = maxs(i+1,j+1);&#125; if(Max_Array[i+1][j] &gt; Max_Array[i+1][j+1]) &#123; return Max_Array[i+1][j] + d[i][j];&#125; else&#123; return Max_Array[i+1][j+1] + d[i][j];&#125; &#125;&#125;int main() &#123; int n = 0 ; cin &gt;&gt; n ; for(int i = 0 ; i &lt; n ; ++i) for(int j = 0 ; j &lt; i ; ++j) &#123; cin &gt;&gt; d[i][j]; Max_Array[i][j] = - 1; &#125; cout &lt;&lt; maxs(1,1); return 0;&#125; 分析3分析2有效地解决了超时的问题，但开出了过多的空间。通过观察我们不难发现，第r行可以由r+1行算出。比如说，第四行的第一个数的最大路径值，等于第五行它的同列与第五行同列+1列的最大值加这个第四行的数的值。而且当第四行第一个数被算出后，第五行第一个数就没用了。这时我们可以让第四行第一行值覆盖第五行第一个值。 这就是滚动数组，对二维数组进行降维。这种动规方法为递推式动规，即用已知的值计算出未知的值。参考代码如下const int M = 1000;int d[M+10][M+10];int n = 0 ;int Maxs[M+10];int main() &#123; int n = 0 ; cin &gt;&gt; n ; //input for(int i = 0 ; i &lt; n ; ++i) for(int j = 0 ; j &lt; i ; ++j) &#123; cin &gt;&gt; d[i][j]; &#125; //init status for(int i = 0 ; i &lt; n ; ++i)&#123;Maxs[i] = d[n][i];&#125; //start for(int i = n-2 ; i &lt;=0 ; ++i) &#123; for(int j = 0 ; j &lt; i ; ++j) &#123; Maxs[i] = max(d[i][j] + Maxs[i] , d[i][j]+ Maxs[i+1]); &#125; &#125; cout &lt;&lt; Maxs[0]; return 0;&#125; 谢谢访问]]></content>
@@ -203,8 +215,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>竞赛</tag>
         <tag>PAT</tag>
+        <tag>竞赛</tag>
         <tag>蓝桥杯</tag>
       </tags>
   </entry>
@@ -311,8 +323,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>竞赛</tag>
         <tag>算法</tag>
+        <tag>竞赛</tag>
         <tag>数据结构</tag>
         <tag>洛谷</tag>
       </tags>
@@ -327,8 +339,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>竞赛</tag>
         <tag>算法</tag>
+        <tag>竞赛</tag>
         <tag>数据结构</tag>
         <tag>洛谷</tag>
       </tags>
