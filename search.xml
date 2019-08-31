@@ -1,6 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[01矩阵]]></title>
+    <url>%2F2019%2F08%2F31%2F01%E7%9F%A9%E9%98%B5%2F</url>
+    <content type="text"><![CDATA[题目描述给定一个由 0 和 1 组成的矩阵，找出每个元素到最近的 0 的距离。 两个相邻元素间的距离为 1 。 示例1输入:0 0 00 1 00 0 0输出:0 0 00 1 00 0 0 示例2输入:0 0 00 1 01 1 1输出:0 0 00 1 01 2 1 注意事项 给定矩阵的元素个数不超过 10000。 给定矩阵中至少有一个元素是 0。 矩阵中的元素只在四个方向上相邻: 上、下、左、右。 分析 这道题所有为0的点都是起点。 然后开始BFS遍历，从queue中取出一个数字，遍历其周围四个点，如果越界或者周围点的值小于等于当前值加1，则直接跳过。 因为周围点的距离更小的话，就没有更新的必要，否则将周围点的值更新为当前值加1，然后把周围点的坐标加入queue参考代码class Solution &#123;public: vector&lt;vector&lt;int&gt;&gt; updateMatrix(vector&lt;vector&lt;int&gt;&gt;&amp; matrix) &#123; int m = matrix.size(), n = matrix[0].size(); vector&lt;vector&lt;int&gt;&gt; dirs&#123;&#123;0,-1&#125;,&#123;-1,0&#125;,&#123;0,1&#125;,&#123;1,0&#125;&#125;; queue&lt;pair&lt;int, int&gt;&gt; q; for (int i = 0; i &lt; m; ++i) &#123; for (int j = 0; j &lt; n; ++j) &#123; if (matrix[i][j] == 0) q.push(&#123;i, j&#125;); else matrix[i][j] = INT_MAX; &#125; &#125; while (!q.empty()) &#123; auto t = q.front(); q.pop(); for (auto dir : dirs) &#123; int x = t.first + dir[0], y = t.second + dir[1]; if (x &lt; 0 || x &gt;= m || y &lt; 0 || y &gt;= n || matrix[x][y] &lt;= matrix[t.first][t.second] + 1) continue; matrix[x][y] = matrix[t.first][t.second] + 1; q.push(&#123;x, y&#125;); &#125; &#125; return matrix; &#125;&#125;; 谢谢访问]]></content>
+      <categories>
+        <category>LeetcodeDateBase</category>
+        <category>Queue</category>
+        <category>BFS</category>
+      </categories>
+      <tags>
+        <tag>leetcode</tag>
+        <tag>C++</tag>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[图像渲染]]></title>
+    <url>%2F2019%2F08%2F31%2F%E5%9B%BE%E5%83%8F%E6%B8%B2%E6%9F%93%2F</url>
+    <content type="text"><![CDATA[题目描述有一幅以二维整数数组表示的图画，每一个整数表示该图画的像素值大小，数值在 0 到 65535 之间。 给你一个坐标 (sr, sc) 表示图像渲染开始的像素值（行 ，列）和一个新的颜色值 newColor，让你重新上色这幅图像。 为了完成上色工作，从初始坐标开始，记录初始坐标的上下左右四个方向上像素值与初始坐标相同的相连像素点，接着再记录这四个方向上符合条件的像素点与他们对应四个方向上像素值与初始坐标相同的相连像素点，……，重复该过程。将所有有记录的像素点的颜色值改为新的颜色值。 最后返回经过上色渲染后的图像。 示例输入: image = [[1,1,1],[1,1,0],[1,0,1]]sr = 1, sc = 1, newColor = 2输出: [[2,2,2],[2,2,0],[2,0,1]]解析: 在图像的正中间，(坐标(sr,sc)=(1,1)),在路径上所有符合条件的像素点的颜色都被更改成2。注意，右下角的像素没有更改为2，因为它不是在上下左右四个方向上与初始点相连的像素点。 分析这是一道简单的队列BFS题 注意，两个点不仅要相邻，而且要初始像素相同 如果以前的颜色与新的颜色一样，就不用改变，直接返回old 本题示例描述不清(自认为),看看参考代码会更好理解 参考代码class Solution &#123;public: vector&lt;vector&lt;int&gt;&gt; floodFill(vector&lt;vector&lt;int&gt;&gt;&amp; image, int sr, int sc, int newColor) &#123; int row = image.size(); int col = image[0].size(); vector&lt;pair&lt;int,int&gt;&gt; directions = &#123; &#123;-1, 0&#125;, &#123;1, 0&#125;, &#123;0, -1&#125;, &#123;0, 1&#125; &#125;; queue&lt;pair&lt;int,int&gt;&gt; q ; int old = image[sr][sc]; if(image[sr][sc] == newColor) &#123; return image; &#125; //BFS q.push(&#123;sr,sc&#125;); while(!q.empty()) &#123; int len = q.size(); while(len--) &#123; pair&lt;int,int&gt; olds = q.front(); int rows = olds.first; int cols = olds.second; q.pop(); image[rows][cols] = newColor; for(int i = 0 ; i &lt; 4 ; ++i) &#123; int tempr = rows + directions[i].first; int tempc = cols + directions[i].second; if(tempr &gt;= 0 &amp;&amp; tempr &lt; image.size() &amp;&amp; tempc &gt;= 0 &amp;&amp; tempc &lt; image[0].size() &amp;&amp; image[tempr][tempc] != newColor &amp;&amp; image[tempr][tempc] == old) &#123; q.push(&#123;tempr,tempc&#125;); &#125; &#125; &#125; &#125; return image ; &#125;&#125;; 谢谢访问]]></content>
+      <categories>
+        <category>LeetcodeDateBase</category>
+        <category>Queue</category>
+        <category>BFS</category>
+      </categories>
+      <tags>
+        <tag>leetcode</tag>
+        <tag>C++</tag>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[岛屿数量]]></title>
+    <url>%2F2019%2F08%2F31%2F%E5%B2%9B%E5%B1%BF%E6%95%B0%E9%87%8F%2F</url>
+    <content type="text"><![CDATA[题目描述给定一个由 ‘1’（陆地）和 ‘0’（水）组成的的二维网格，计算岛屿的数量。一个岛被水包围，并且它是通过水平方向或垂直方向上相邻的陆地连接而成的。你可以假设网格的四个边均被水包围。 示例1输入:11110110101100000000输出: 1 示例2输入:11000110000010000011输出: 3``` ### 分析1. 思路: 找到一个陆地，通过利用队列，将其相连的陆地都变成海洋。2. 实现: 设置双层循环，找到一个陆地，加入队列，通过队列不断将与其相连的陆地变成海洋。在队列循环外，每遍历完一块陆地，计数器值就加一### 参考代码 class Solution {public: int numIslands(vector]]></content>
+      <categories>
+        <category>LeetcodeDateBase</category>
+        <category>Queue</category>
+        <category>BFS</category>
+      </categories>
+      <tags>
+        <tag>leetcode</tag>
+        <tag>C++</tag>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[完全平方数]]></title>
     <url>%2F2019%2F08%2F30%2F%E5%AE%8C%E5%85%A8%E5%B9%B3%E6%96%B9%E6%95%B0%2F</url>
     <content type="text"><![CDATA[题目描述给定正整数 n，找到若干个完全平方数（比如 1, 4, 9, 16, …）使得它们的和等于 n。你需要让组成和的完全平方数的个数最少。 示例1输入: n = 12输出: 3 解释: 12 = 4 + 4 + 4. 示例2输入: n = 13输出: 2解释: 13 = 4 + 9. 分析 采用队列BFS，第一次(相当于第一层)，依次对分别对root减去1，4，9… (减数要小于root) 判断减完后的结果是否为0，如果不是，加入队列中。如果是，则返回层数。 取出队列中的元素，进行再一轮(层)减法，然后判断。重复步骤二，直到结束。 画图类似与一个多叉树。 参考代码class Solution &#123;public: int numSquares(int n) &#123; queue &lt;int&gt; q ; vector&lt;bool&gt; exit(n,false) ; int temp = n ; for(int i = 0 ,j = 1 ; j*j &lt;= temp ;++i ,++j) &#123; if(temp - j*j == 0) &#123; return 1 ; &#125; q.push(temp-j*j); exit[temp-j*j] = true ; &#125; int step = 1 ; while(!q.empty()) &#123; int len = q.size(); for(int i = 0 ; i &lt; len ; ++i) &#123; int num = q.front(); q.pop(); for(int i = 0 , j = 1 ; j*j &lt;= num ; ++i,++j) &#123; if(num - j*j == 0) &#123; return ++step; &#125; // 避免队列里有重复数字 if(exit[num-j*j] == false) &#123;q.push(num-j*j);&#125; &#125; &#125; ++step; &#125; return step; &#125;&#125;; 谢谢访问]]></content>
@@ -9,9 +54,9 @@
         <category>Queue</category>
       </categories>
       <tags>
+        <tag>leetcode</tag>
         <tag>C++</tag>
         <tag>算法</tag>
-        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -23,9 +68,9 @@
         <category>Queue</category>
       </categories>
       <tags>
+        <tag>leetcode</tag>
         <tag>C++</tag>
         <tag>算法</tag>
-        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -62,9 +107,9 @@
         <category>Stack</category>
       </categories>
       <tags>
+        <tag>leetcode</tag>
         <tag>C++</tag>
         <tag>算法</tag>
-        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -76,9 +121,9 @@
         <category>Stack</category>
       </categories>
       <tags>
+        <tag>leetcode</tag>
         <tag>C++</tag>
         <tag>算法</tag>
-        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -90,9 +135,9 @@
         <category>week150</category>
       </categories>
       <tags>
+        <tag>leetcode</tag>
         <tag>C++</tag>
         <tag>算法</tag>
-        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -104,9 +149,9 @@
         <category>week150</category>
       </categories>
       <tags>
+        <tag>leetcode</tag>
         <tag>C++</tag>
         <tag>算法</tag>
-        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -118,9 +163,9 @@
         <category>week150</category>
       </categories>
       <tags>
+        <tag>leetcode</tag>
         <tag>C++</tag>
         <tag>算法</tag>
-        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -128,7 +173,8 @@
     <url>%2F2019%2F08%2F20%2F%E6%AF%8F%E6%97%A5%E6%B8%A9%E5%BA%A6%2F</url>
     <content type="text"><![CDATA[题目描述根据每日 气温 列表，请重新生成一个列表，对应位置的输入是你需要再等待多久温度才会升高超过该日的天数。如果之后都不会升高，请在该位置用 0 来代替。例如，给定一个列表 temperatures = [73, 74, 75, 71, 69, 72, 76, 73]，你的输出应该是 [1, 1, 4, 2, 1, 1, 0, 0]。提示：气温 列表长度的范围是 [1, 30000]。每个气温的值的均为华氏度，都是在 [30, 100] 范围内的整数。 输入数据[73,74,75,71,69,72,76,73] 期望数据[1,1,4,2,1,1,0,0] 分析此种找到一个数大的值的第一个数问题，就是明摆着告诉你要用到单调栈其实使用两次循环也可以，但是复杂度高，容易答题失败 什么是单调栈就是一个栈，里面的元素的大小按照他们所在栈内的位置，满足一定的单调性 本题如何利用单调栈维护一个单调递减的stack，stack内部存的是原数组的每个index。每当我们遇到一个比当前栈顶所对应的数大的数的时候，我们就遇到了一个“大数“。这个”大数“比它之前多少个数大我们不知道，但是至少比当前栈顶所对应的数大。我们弹出栈内所有对应数比这个数小的栈内元素，并更新它们在返回数组中对应位置的值。因为这个栈本身的单调性，当我们栈顶元素所对应的数比这个元素大的时候，我们可以保证，栈内所有元素都比这个元素大。对于每一个元素，当它出栈的时候，说明它遇到了自己的next greater element，我们也就要更新redult数组中的对应位置的值。如果一个元素一直不曾出栈，那么说明不存在next greater element，我们也就不用更新result数组了。参考代码class Solution &#123;public: vector&lt;int&gt; dailyTemperatures(vector&lt;int&gt;&amp; T) &#123; vector&lt;int&gt; result(T.size(),0); stack&lt;int&gt; q; for(int i = 0 ; i &lt; T.size() ; ++i) &#123; while(!q.empty()&amp;&amp;T[q.top()] &lt; T[i]) &#123; result[q.top()] = i - q.top(); q.pop(); &#125; q.push(i); &#125; return result; &#125;&#125;; 谢谢访问]]></content>
       <categories>
-        <category>Leetcode</category>
+        <category>LeetcodeDateBase</category>
+        <category>Stack</category>
       </categories>
       <tags>
         <tag>C++</tag>
@@ -146,8 +192,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>PAT</tag>
         <tag>算法</tag>
+        <tag>PAT</tag>
       </tags>
   </entry>
   <entry>
@@ -160,8 +206,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>PAT</tag>
         <tag>算法</tag>
+        <tag>PAT</tag>
       </tags>
   </entry>
   <entry>
@@ -174,8 +220,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>PAT</tag>
         <tag>算法</tag>
+        <tag>PAT</tag>
       </tags>
   </entry>
   <entry>
@@ -188,8 +234,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>PAT</tag>
         <tag>算法</tag>
+        <tag>PAT</tag>
       </tags>
   </entry>
   <entry>
@@ -202,8 +248,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>PAT</tag>
         <tag>算法</tag>
+        <tag>PAT</tag>
       </tags>
   </entry>
   <entry>
@@ -216,8 +262,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>PAT</tag>
         <tag>算法</tag>
+        <tag>PAT</tag>
       </tags>
   </entry>
   <entry>
@@ -230,8 +276,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>PAT</tag>
         <tag>算法</tag>
+        <tag>PAT</tag>
       </tags>
   </entry>
   <entry>
@@ -243,8 +289,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>竞赛</tag>
         <tag>PAT</tag>
+        <tag>竞赛</tag>
         <tag>蓝桥杯</tag>
       </tags>
   </entry>
@@ -322,8 +368,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>旗舰学科</tag>
         <tag>算法</tag>
+        <tag>旗舰学科</tag>
         <tag>数据结构</tag>
       </tags>
   </entry>
@@ -351,9 +397,9 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>竞赛</tag>
         <tag>算法</tag>
         <tag>数据结构</tag>
+        <tag>竞赛</tag>
         <tag>洛谷</tag>
       </tags>
   </entry>
@@ -367,9 +413,9 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>竞赛</tag>
         <tag>算法</tag>
         <tag>数据结构</tag>
+        <tag>竞赛</tag>
         <tag>洛谷</tag>
       </tags>
   </entry>
@@ -383,8 +429,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>旗舰学科</tag>
         <tag>算法</tag>
+        <tag>旗舰学科</tag>
       </tags>
   </entry>
   <entry>
@@ -411,8 +457,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>旗舰学科</tag>
         <tag>算法</tag>
+        <tag>旗舰学科</tag>
         <tag>数据结构</tag>
       </tags>
   </entry>
