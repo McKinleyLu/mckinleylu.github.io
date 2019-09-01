@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[队列与栈学习总结]]></title>
+    <url>%2F2019%2F09%2F01%2F%E9%98%9F%E5%88%97%E4%B8%8E%E6%A0%88%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93%2F</url>
+    <content type="text"><![CDATA[数据结构队列基本队列 结构特点：元素先进先出。 关联算法：BFS 相关题目：图论、字符串相关问题 基本队列实现方法（链表法） 队列ADT typedef struct&#123; QElement data; struct QNode * next;&#125;QNode,*QueuePtr;typedef struct&#123; QueuePtr front ; QueuePtr rear ;&#125;LinkQueue; 初始化队列 Status InitQueue(LinkQueue q)&#123; Q.front = Q.rear = (QueuePtr)malloc(sizeof(QNode)); if(!Q.front) exit(OVERFLOW); Q.front-&gt;next = nullptr; return OK;&#125; 销毁队列 Status DestroyQueue(LinkQueue &amp;Q)&#123; while(Q.front) &#123; Q.rear = Q.front-&gt;next; free(Q.front); Q.front = Q.rear; &#125;&#125; 向队列添加元素 Status EnQueue(LinkQueue &amp; Q ,QElement e)&#123; p = (QueuePtr)malloc(sizeof(QNode)); if(!P) exit(OVERFLOW); p-&gt;data = e ; p-&gt;next = nullptr; Q.rear-&gt;next = p ; Q.rear = p; return OK;&#125; 取出一个元素，并将其在队列中删除 Status DeQueue(LinkQueue &amp;Q ,QElement &amp;e)&#123; if(Q.front == Q.rear) return ERROR; p = Q.front-&gt;next; e = Q.front-&gt;data; Q.front-&gt;next = p-&gt;next; if(Q.rear == p) Q.rear = Q.front; free(p); return OK;&#125; 循环队列特点：循环利用空间，减少空间浪费 循环队列实现方法 初始化 /** Initialize your data structure here. Set the size of the queue to be k. */ MyCircularQueue(int k) &#123; data = new int[k]; head = 0; tail = 0; len = k; count = 0;&#125; 向队列插入元素 /** Insert an element into the circular queue. Return true if the operation is successful. */bool enQueue(int value) &#123; if (isFull()) //循环队列满 &#123; return false; &#125; else // 插入元素到队尾，队尾索引值增一，元素个数增一 &#123; data[tail] = value; count++; tail = (tail + 1) % len; return true; &#125;&#125; 从队列中取出元素 /** Get the front item from the queue. */int Front()&#123; if (isEmpty()) //循环队列空 &#123; return -1; &#125; else &#123; return data[head]; &#125;&#125; 删除队列头元素 /** Delete an element from the circular queue. Return true if the operation is successful. */bool deQueue()&#123; if (isEmpty()) //循环队列空 &#123; return false; &#125; else // 队头索引值增一，元素个数减一 &#123; head = (head + 1) % len; count--; return true; &#125;&#125; 取出队尾元素 int Rear() &#123;if (isEmpty()) //循环队列空 &#123; return -1; &#125;// 队尾元素位于队尾索引值减一的位置，但若队尾循环到索引 0 的位置，队尾元素位于数组最后else &#123; int temp = tail == 0 ? (len-1) : (tail-1); return data[temp]; &#125;&#125; 判断队列是否为空 /** Checks whether the circular queue is empty or not. */bool isEmpty()&#123; return count == 0; // 队列元素个数为零，队列空&#125; 判断队列是否已满 /** Checks whether the circular queue is full or not. */bool isFull()&#123; return count == len; // 队列元素个数为数组最大长度，队列满&#125; C++队列使用方法#include &lt;queue&gt; #include &lt;cstdio&gt; using namespace std; int main(int argc, char const *argv[]) &#123; queue&lt;int&gt; q ; //定义一个队列 q.push(23); //入队 q.size(); //返回队列大小 q.empty(); //判断队列为空 q.font(); //读取队头以及队尾元素 q.back(); q.pop(); //删除队首元素 return 0; &#125; 队列竞赛题参考01矩阵 图像渲染 岛屿数量 未完待续谢谢访问]]></content>
+      <categories>
+        <category>LeetcodeDateBase</category>
+        <category>Summary</category>
+        <category>Queue&amp;&amp;Stack</category>
+      </categories>
+      <tags>
+        <tag>leetcode</tag>
+        <tag>C++</tag>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[01矩阵]]></title>
     <url>%2F2019%2F08%2F31%2F01%E7%9F%A9%E9%98%B5%2F</url>
     <content type="text"><![CDATA[题目描述给定一个由 0 和 1 组成的矩阵，找出每个元素到最近的 0 的距离。 两个相邻元素间的距离为 1 。 示例1输入:0 0 00 1 00 0 0输出:0 0 00 1 00 0 0 示例2输入:0 0 00 1 01 1 1输出:0 0 00 1 01 2 1 注意事项 给定矩阵的元素个数不超过 10000。 给定矩阵中至少有一个元素是 0。 矩阵中的元素只在四个方向上相邻: 上、下、左、右。 分析 这道题所有为0的点都是起点。 然后开始BFS遍历，从queue中取出一个数字，遍历其周围四个点，如果越界或者周围点的值小于等于当前值加1，则直接跳过。 因为周围点的距离更小的话，就没有更新的必要，否则将周围点的值更新为当前值加1，然后把周围点的坐标加入queue参考代码class Solution &#123;public: vector&lt;vector&lt;int&gt;&gt; updateMatrix(vector&lt;vector&lt;int&gt;&gt;&amp; matrix) &#123; int m = matrix.size(), n = matrix[0].size(); vector&lt;vector&lt;int&gt;&gt; dirs&#123;&#123;0,-1&#125;,&#123;-1,0&#125;,&#123;0,1&#125;,&#123;1,0&#125;&#125;; queue&lt;pair&lt;int, int&gt;&gt; q; for (int i = 0; i &lt; m; ++i) &#123; for (int j = 0; j &lt; n; ++j) &#123; if (matrix[i][j] == 0) q.push(&#123;i, j&#125;); else matrix[i][j] = INT_MAX; &#125; &#125; while (!q.empty()) &#123; auto t = q.front(); q.pop(); for (auto dir : dirs) &#123; int x = t.first + dir[0], y = t.second + dir[1]; if (x &lt; 0 || x &gt;= m || y &lt; 0 || y &gt;= n || matrix[x][y] &lt;= matrix[t.first][t.second] + 1) continue; matrix[x][y] = matrix[t.first][t.second] + 1; q.push(&#123;x, y&#125;); &#125; &#125; return matrix; &#125;&#125;; 谢谢访问]]></content>
@@ -289,8 +304,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>PAT</tag>
         <tag>竞赛</tag>
+        <tag>PAT</tag>
         <tag>蓝桥杯</tag>
       </tags>
   </entry>
@@ -398,8 +413,8 @@
       <tags>
         <tag>C++</tag>
         <tag>算法</tag>
-        <tag>数据结构</tag>
         <tag>竞赛</tag>
+        <tag>数据结构</tag>
         <tag>洛谷</tag>
       </tags>
   </entry>
@@ -414,8 +429,8 @@
       <tags>
         <tag>C++</tag>
         <tag>算法</tag>
-        <tag>数据结构</tag>
         <tag>竞赛</tag>
+        <tag>数据结构</tag>
         <tag>洛谷</tag>
       </tags>
   </entry>
