@@ -1,6 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[螺旋矩阵]]></title>
+    <url>%2F2019%2F09%2F13%2F%E8%9E%BA%E6%97%8B%E7%9F%A9%E9%98%B5%2F</url>
+    <content type="text"><![CDATA[题目描述给定一个包含 m x n 个元素的矩阵（m 行, n 列），请按照顺时针螺旋顺序，返回矩阵中的所有元素。 示例一输入:[ [ 1, 2, 3 ], [ 4, 5, 6 ], [ 7, 8, 9 ]]输出: [1,2,3,6,9,8,7,4,5] 示例二输入:[ [1, 2, 3, 4], [5, 6, 7, 8], [9,10,11,12]]输出: [1,2,3,4,8,12,11,10,9,5,6,7] 思路逐层遍历，请参看代码 参考代码class Solution &#123;public: vector&lt;int&gt; spiralOrder(vector&lt;vector&lt;int&gt;&gt;&amp; matrix) &#123; if (matrix.empty() || matrix[0].empty()) return &#123;&#125;; int m = matrix.size(), n = matrix[0].size(); vector&lt;int&gt; res; int up = 0, down = m - 1, left = 0, right = n - 1; while (true) &#123; for (int j = left; j &lt;= right; ++j) res.push_back(matrix[up][j]); if (++up &gt; down) break; for (int i = up; i &lt;= down; ++i) res.push_back(matrix[i][right]); if (--right &lt; left) break; for (int j = right; j &gt;= left; --j) res.push_back(matrix[down][j]); if (--down &lt; up) break; for (int i = down; i &gt;= up; --i) res.push_back(matrix[i][left]); if (++left &gt; right) break; &#125; return res; &#125;&#125;; 谢谢访问]]></content>
+      <categories>
+        <category>LeetcodeDateBase</category>
+        <category>Array</category>
+      </categories>
+      <tags>
+        <tag>leetcode</tag>
+        <tag>C++</tag>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[对角线遍历]]></title>
+    <url>%2F2019%2F09%2F13%2F%E5%AF%B9%E8%A7%92%E7%BA%BF%E9%81%8D%E5%8E%86%2F</url>
+    <content type="text"><![CDATA[题目表述给定一个含有 M x N 个元素的矩阵（M 行，N 列），请以对角线遍历的顺序返回这个矩阵中的所有元素，对角线遍历如下图所示。 示例输入:[ [ 1, 2, 3 ], [ 4, 5, 6 ], [ 7, 8, 9 ]]输出: [1,2,4,7,5,3,6,8,9]解释: 说明：给定矩阵中的元素总数不会超过 100000 。 题目分析 观察对角线遍历是右上、左下型移动 每次相加应为{x轴加一，y轴减一}，或者{x轴减一，y轴加一} 当x轴溢出时，则x轴为row-1，y轴加二 当y轴溢出时，则y轴为col-1 ， x轴加二 当x轴小于0时，则x轴为0，y轴加一 当y轴小于0时，则y轴为0，x轴加一 参考代码class Solution &#123;public: vector&lt;int&gt; findDiagonalOrder(vector&lt;vector&lt;int&gt;&gt;&amp; matrix) &#123; if (matrix.empty() || matrix[0].empty()) return &#123;&#125;; int m = matrix.size(), n = matrix[0].size(), r = 0, c = 0, k = 0; vector&lt;int&gt; res(m * n); vector&lt;vector&lt;int&gt;&gt; dirs&#123;&#123;-1,1&#125;, &#123;1,-1&#125;&#125;; for (int i = 0; i &lt; m * n; ++i) &#123; res[i] = matrix[r][c]; r += dirs[k][0]; c += dirs[k][1]; if (r &gt;= m) &#123;r = m - 1; c += 2; k = 1 - k;&#125; if (c &gt;= n) &#123;c = n - 1; r += 2; k = 1 - k;&#125; if (r &lt; 0) &#123;r = 0; k = 1 - k;&#125; if (c &lt; 0) &#123;c = 0; k = 1 - k;&#125; &#125; return res; &#125;&#125;; 总结 首先考虑非特殊(本题为非矩阵角处)的规律 在考虑特殊情况 谢谢访问]]></content>
+      <categories>
+        <category>LeetcodeDateBase</category>
+        <category>Array</category>
+      </categories>
+      <tags>
+        <tag>leetcode</tag>
+        <tag>C++</tag>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[加一]]></title>
+    <url>%2F2019%2F09%2F13%2F%E5%8A%A0%E4%B8%80%2F</url>
+    <content type="text"><![CDATA[题目描述给定一个由整数组成的非空数组所表示的非负整数，在该数的基础上加一。 最高位数字存放在数组的首位， 数组中每个元素只存储单个数字。 你可以假设除了整数 0 之外，这个整数不会以零开头。 示例一输入: [1,2,3]输出: [1,2,4]解释: 输入数组表示数字 123。 示例二输入: [4,3,2,1]输出: [4,3,2,2]解释: 输入数组表示数字 4321。 题目分析 注意单纯的相加问题，如109，加一则为110. 注意进位问题。如果原来是99，则加一之后为100。 参考代码class Solution &#123;public: vector&lt;int&gt; plusOne(vector&lt;int&gt;&amp; digits) &#123; int k = 10 ,sum = 0, co = 0 , len = digits.size() -1; for(int i = len ; i &gt;= 0 ; --i) &#123; if(i == digits.size()-1) &#123;digits[i] = digits[i] + 1 + co ; co = 0 ;&#125; else &#123;digits[i] += co ; co = 0 ;&#125; int tmp = digits[i] ; if(tmp &gt;= 10) &#123;digits[i] -= 10 ; co = 1 ;&#125; if(i == 0 &amp;&amp; co == 1 ) &#123;digits.insert(digits.begin(),1);&#125; &#125; return digits; &#125;&#125;; 谢谢访问]]></content>
+      <categories>
+        <category>LeetcodeDateBase</category>
+        <category>Array</category>
+      </categories>
+      <tags>
+        <tag>leetcode</tag>
+        <tag>C++</tag>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[寻找数组的中心索引]]></title>
+    <url>%2F2019%2F09%2F13%2F%E5%AF%BB%E6%89%BE%E6%95%B0%E7%BB%84%E7%9A%84%E4%B8%AD%E5%BF%83%E7%B4%A2%E5%BC%95%2F</url>
+    <content type="text"><![CDATA[题目描述给定一个整数类型的数组 nums，请编写一个能够返回数组“中心索引”的方法。 我们是这样定义数组中心索引的：数组中心索引的左侧所有元素相加的和等于右侧所有元素相加的和。 如果数组不存在中心索引，那么我们应该返回 -1。如果数组有多个中心索引，那么我们应该返回最靠近左边的那一个。 示例一输入: nums = [1, 7, 3, 6, 5, 6]输出: 3解释: 索引3 (nums[3] = 6) 的左侧数之和(1 + 7 + 3 = 11)，与右侧数之和(5 + 6 = 11)相等。同时, 3 也是第一个符合要求的中心索引。 示例二输入: nums = [1, 2, 3]输出: -1解释: 数组中不存在满足此条件的中心索引。 说明 nums 的长度范围为 [0, 10000]。 任何一个 nums[i] 将会是一个范围在 [-1000, 1000]的整数。 题目分析思路一（延迟2000ms+） 思路迭代数组，判断每一个数左边数之和是否等于右边数之和 需要一个大循环套两个小循环，时间复杂度以及空间复杂度较高 注意当数组元素为一、为二时等特殊情况,注意竞赛时多次提交会罚时！ 思路二（延迟28ms+） 首先直接计算所有数组元素之和 之后从数组下标为零开始，依次减去该数组元素值，累加到之前减去的数值，并判断被减去后的值是否等于减数的值 该方法不用考虑什么特殊情况 参考代码思路一class Solution &#123;public: int pivotIndex(vector&lt;int&gt;&amp; nums) &#123; int len = nums.size(); //当数组长度为一时，0一定时中心索引 if(len == 1) return 0 ; //当数组长度为二且第二个元素为0时，0一定是中心索引，否则一定不存在中心索引 if(len == 2)&#123; if(nums[1] == 0) &#123;return 0;&#125; else &#123;return -1 ;&#125; &#125; for(int i = 0; i &lt; len ; i++) &#123; int left = 0 , right = accumulate(nums.begin() + i + 1 , nums.end(),0); if(i == 0) &#123;left = 0;&#125; else &#123;left = accumulate(nums.begin() , nums.begin()+i,0);&#125; if(left == right) &#123;return i ;&#125; &#125; return - 1; &#125;&#125;; 思路二class Solution &#123;public: int pivotIndex(vector&lt;int&gt;&amp; nums) &#123; int size = nums.size(),i = 0 , tatal = 0 ,left = 0; for (i=0;i&lt;size;i++) &#123;total += nums[i];&#125; for (i=0;i&lt;size;i++) &#123; if (total-nums[i] == 2*left) &#123;return i;&#125; left += nums[i]; &#125; return -1; &#125;&#125;; 总结竞赛题需要思考，涉及问题等价转换(及建模)。如果按照题目要求按部就班的做，一般时复杂繁琐的或者无法用过的。 谢谢访问]]></content>
+      <categories>
+        <category>LeetcodeDateBase</category>
+        <category>Array</category>
+      </categories>
+      <tags>
+        <tag>leetcode</tag>
+        <tag>C++</tag>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[数组和字符串总结]]></title>
+    <url>%2F2019%2F09%2F13%2F%E6%95%B0%E7%BB%84%E5%92%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%80%BB%E7%BB%93%2F</url>
+    <content type="text"><![CDATA[数组简介数组是一种基本的数据结构，用于按顺序存储元素的集合。但是元素可以随机存取，因为数组中的每个元素都可以通过数组索引来识别。]]></content>
+      <categories>
+        <category>LeetcodeDateBase</category>
+        <category>Summary</category>
+        <category>Array&amp;&amp;String</category>
+      </categories>
+      <tags>
+        <tag>leetcode</tag>
+        <tag>C++</tag>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[队列与栈学习总结]]></title>
     <url>%2F2019%2F09%2F01%2F%E9%98%9F%E5%88%97%E4%B8%8E%E6%A0%88%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93%2F</url>
     <content type="text"><![CDATA[数据结构队列基本队列 结构特点：元素先进先出。 关联算法：BFS 相关题目：图论、字符串相关问题 基本队列实现方法（链表法） 队列ADT typedef struct&#123; QElement data; struct QNode * next;&#125;QNode,*QueuePtr;typedef struct&#123; QueuePtr front ; QueuePtr rear ;&#125;LinkQueue; 初始化队列 Status InitQueue(LinkQueue q)&#123; Q.front = Q.rear = (QueuePtr)malloc(sizeof(QNode)); if(!Q.front) exit(OVERFLOW); Q.front-&gt;next = nullptr; return OK;&#125; 销毁队列 Status DestroyQueue(LinkQueue &amp;Q)&#123; while(Q.front) &#123; Q.rear = Q.front-&gt;next; free(Q.front); Q.front = Q.rear; &#125;&#125; 向队列添加元素 Status EnQueue(LinkQueue &amp; Q ,QElement e)&#123; p = (QueuePtr)malloc(sizeof(QNode)); if(!P) exit(OVERFLOW); p-&gt;data = e ; p-&gt;next = nullptr; Q.rear-&gt;next = p ; Q.rear = p; return OK;&#125; 取出一个元素，并将其在队列中删除 Status DeQueue(LinkQueue &amp;Q ,QElement &amp;e)&#123; if(Q.front == Q.rear) return ERROR; p = Q.front-&gt;next; e = Q.front-&gt;data; Q.front-&gt;next = p-&gt;next; if(Q.rear == p) Q.rear = Q.front; free(p); return OK;&#125; 循环队列特点：循环利用空间，减少空间浪费 循环队列实现方法 初始化 /** Initialize your data structure here. Set the size of the queue to be k. */ MyCircularQueue(int k) &#123; data = new int[k]; head = 0; tail = 0; len = k; count = 0;&#125; 向队列插入元素 /** Insert an element into the circular queue. Return true if the operation is successful. */bool enQueue(int value) &#123; if (isFull()) //循环队列满 &#123; return false; &#125; else // 插入元素到队尾，队尾索引值增一，元素个数增一 &#123; data[tail] = value; count++; tail = (tail + 1) % len; return true; &#125;&#125; 从队列中取出元素 /** Get the front item from the queue. */int Front()&#123; if (isEmpty()) //循环队列空 &#123; return -1; &#125; else &#123; return data[head]; &#125;&#125; 删除队列头元素 /** Delete an element from the circular queue. Return true if the operation is successful. */bool deQueue()&#123; if (isEmpty()) //循环队列空 &#123; return false; &#125; else // 队头索引值增一，元素个数减一 &#123; head = (head + 1) % len; count--; return true; &#125;&#125; 取出队尾元素 int Rear() &#123;if (isEmpty()) //循环队列空 &#123; return -1; &#125;// 队尾元素位于队尾索引值减一的位置，但若队尾循环到索引 0 的位置，队尾元素位于数组最后else &#123; int temp = tail == 0 ? (len-1) : (tail-1); return data[temp]; &#125;&#125; 判断队列是否为空 /** Checks whether the circular queue is empty or not. */bool isEmpty()&#123; return count == 0; // 队列元素个数为零，队列空&#125; 判断队列是否已满 /** Checks whether the circular queue is full or not. */bool isFull()&#123; return count == len; // 队列元素个数为数组最大长度，队列满&#125; C++队列使用方法#include &lt;queue&gt; #include &lt;cstdio&gt; using namespace std; int main(int argc, char const *argv[]) &#123; queue&lt;int&gt; q ; //定义一个队列 q.push(23); //入队 q.size(); //返回队列大小 q.empty(); //判断队列为空 q.font(); //读取队头以及队尾元素 q.back(); q.pop(); //删除队首元素 return 0; &#125; 队列竞赛题参考01矩阵 图像渲染 岛屿数量 未完待续谢谢访问]]></content>
@@ -304,8 +375,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>竞赛</tag>
         <tag>PAT</tag>
+        <tag>竞赛</tag>
         <tag>蓝桥杯</tag>
       </tags>
   </entry>
