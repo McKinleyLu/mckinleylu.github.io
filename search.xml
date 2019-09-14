@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[读者反馈]]></title>
+    <url>%2F2019%2F09%2F14%2F%E8%AF%BB%E8%80%85%E5%8F%8D%E9%A6%88%2F</url>
+    <content type="text"><![CDATA[读者反馈当文章过长时，来比力无法正常加载，所以及大家在这里提出意见以及建议]]></content>
+      <categories>
+        <category>读者反馈</category>
+      </categories>
+      <tags>
+        <tag>查找不足</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[输入有序数组]]></title>
+    <url>%2F2019%2F09%2F14%2F%E8%BE%93%E5%85%A5%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%2F</url>
+    <content type="text"><![CDATA[题目描述给定一个已按照升序排列 的有序数组，找到两个数使得它们相加之和等于目标数。 函数应该返回这两个下标值 index1 和 index2，其中 index1 必须小于 index2。 说明 返回的下标值（index1 和 index2）不是从零开始的。 你可以假设每个输入只对应唯一的答案，而且你不可以重复使用相同的元素。 示例输入: numbers = [2, 7, 11, 15], target = 9输出: [1,2]解释: 2 与 7 之和等于目标数 9 。因此 index1 = 1, index2 = 2 。 分析设两个指针，一个指向数组的起点，一个指向数组的末尾。如果start + end &gt; target ,则end—，若start + end &lt; target ,则start++。直到找到或者start == end 结束。 参考代码class Solution &#123;public: vector&lt;int&gt; twoSum(vector&lt;int&gt;&amp; numbers, int target) &#123; vector&lt;int&gt;::iterator t = numbers.end() -1 ; vector&lt;int&gt;::iterator i = numbers.begin(); vector&lt;int&gt; ans; while(1) &#123; if(target == *t+*i) &#123; ans.push_back(i-numbers.begin() +1); ans.push_back(t-numbers.begin() +1); return ans; &#125; if(target &gt; *t+*i) &#123; i++; &#125; else &#123; t--; &#125; &#125; &#125;&#125;; 谢谢访问]]></content>
+      <categories>
+        <category>LeetcodeDateBase</category>
+        <category>Double Point</category>
+      </categories>
+      <tags>
+        <tag>leetcode</tag>
+        <tag>C++</tag>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[螺旋矩阵]]></title>
     <url>%2F2019%2F09%2F13%2F%E8%9E%BA%E6%97%8B%E7%9F%A9%E9%98%B5%2F</url>
     <content type="text"><![CDATA[题目描述给定一个包含 m x n 个元素的矩阵（m 行, n 列），请按照顺时针螺旋顺序，返回矩阵中的所有元素。 示例一输入:[ [ 1, 2, 3 ], [ 4, 5, 6 ], [ 7, 8, 9 ]]输出: [1,2,3,6,9,8,7,4,5] 示例二输入:[ [1, 2, 3, 4], [5, 6, 7, 8], [9,10,11,12]]输出: [1,2,3,4,8,12,11,10,9,5,6,7] 思路逐层遍历，请参看代码 参考代码class Solution &#123;public: vector&lt;int&gt; spiralOrder(vector&lt;vector&lt;int&gt;&gt;&amp; matrix) &#123; if (matrix.empty() || matrix[0].empty()) return &#123;&#125;; int m = matrix.size(), n = matrix[0].size(); vector&lt;int&gt; res; int up = 0, down = m - 1, left = 0, right = n - 1; while (true) &#123; for (int j = left; j &lt;= right; ++j) res.push_back(matrix[up][j]); if (++up &gt; down) break; for (int i = up; i &lt;= down; ++i) res.push_back(matrix[i][right]); if (--right &lt; left) break; for (int j = right; j &gt;= left; --j) res.push_back(matrix[down][j]); if (--down &lt; up) break; for (int i = down; i &gt;= up; --i) res.push_back(matrix[i][left]); if (++left &gt; right) break; &#125; return res; &#125;&#125;; 谢谢访问]]></content>
@@ -375,8 +400,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>PAT</tag>
         <tag>竞赛</tag>
+        <tag>PAT</tag>
         <tag>蓝桥杯</tag>
       </tags>
   </entry>
