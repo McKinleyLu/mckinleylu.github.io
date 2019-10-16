@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[寻找中项和第k小元素]]></title>
+    <url>%2F2019%2F10%2F16%2F%E5%AF%BB%E6%89%BE%E4%B8%AD%E9%A1%B9%E5%92%8C%E7%AC%ACk%E5%B0%8F%E5%85%83%E7%B4%A0%E3%80%81%2F</url>
+    <content type="text"><![CDATA[问题描述在统计学领域中，中项是一个非常关键的常用的指标值。序列的中项是指排好序后序列的“中间”元素，中项是指序列的第[n/2]个最小元素。寻找序列中项的问题被称为中项值问题，寻找序列中第k小元素的问题被称为选择问题。 要求： 元素个数n≥100。 请利用减治的思想，设计该问题的分治算法。 采用两种划分的方式：教材上的方法和随机选择的方法，并对比两种方法的性能 算法分析 我们采用分治算法，具体算法如下我们将n位的二进制整数X和Y各分为2段，每段的长为n/2位（为简单起见，假设n是2的幂），有下图形式 计算公式为 XY = (A2^(n/2)+B)(C2^(n/2)+D)=AC2^n+(AD+CB)2^(n/2)+BD 对于2的n次方，我们采用左移n位即可，需要的时间为n。另外需要四次乘法以及三次加法，这蕴含下图递推式： 由数学方法我们可知该算法时间复杂度为n^2 所以采用Toom—Cook算法对上面的算法进行优化 wz + xy = (w + x )(y + z) -wy – xz 再结合上面的算式，我们仅计算三次乘法以及6次加减运算，此中方法的递推式如下 经计算，使用Toom—Cook算法的时间复杂度为O(n^1.59)。 分治过程如下 分: 将两个大整数分别分成四个较小整数 治：利用Toom—Cook算法进行计算 组合: 将每次算出的结果以字符串拼接相加 阈值： 这里设置阈值为4，不再分，并将运算结果返回直接运算 参考代码#include &lt;bits/stdc++.h&gt;using namespace std;void QuickSort(vector&lt;int&gt; &amp;a, int left, int right) &#123; if(left &lt; right) &#123; int i = left, j = right, k = a[left]; //利用循环，使基准左边数字均小于基准，右边均大于基准 while (i &lt; j) &#123; while (i &lt; j &amp;&amp; a[j] &lt; k) &#123; --j; &#125; //从右向左找到第一个比基准大的数 if (i &lt; j) &#123; a[i++] = a[j]; &#125; while (i &lt; j &amp;&amp; a[i] &gt; k) &#123; ++i; &#125; //从左向右找到第一个比基准小的数 if (i &lt; j) &#123; a[j--] = a[i]; &#125; &#125; a[i] = k; QuickSort(a, left, i - 1); // 排序k左边 QuickSort(a, i + 1, right); // 排序k右边 &#125;&#125;void divide(vector&lt;int&gt;&amp;a,int &amp;numa, int &amp; numb ,const int mm)&#123; int i = 0 , j = a.size()-1 , k = mm; //利用循环，使基准左边数字均小于基准，右边均大于基准 while (i &lt; j) &#123; while (i &lt; j &amp;&amp; a[j] &lt; k) &#123; --j; &#125; //从右向左找到第一个比基准大的数 if (i &lt; j) &#123; a[i++] = a[j]; &#125; while (i &lt; j &amp;&amp; a[i] &gt; k) &#123; ++i; &#125; //从左向右找到第一个比基准小的数 if (i &lt; j) &#123; a[j--] = a[i]; &#125; &#125; a[i] = mm; for(int i = 0 ; i &lt; a.size()-1 ;++i)&#123;if(a[i] == mm)&#123;numb++;&#125;&#125; numa = i + 1 ;&#125;int Search_K_Element(vector&lt;int&gt;&amp;v,int low,int high,int k)&#123; int p = high - low + 1; if(p &lt; 44) &#123; QuickSort(v,low,high); return v[v.size() / 2]; &#125; vector&lt;int&gt; m ; int tmp = 2 , mm = 0,pos = 0; //分组并排序 int cnt = (high - low + 1)/ 5 ; int left = low ,right = low + 4 ; for(int i = 0 ; i &lt; cnt ; ++i)&#123; QuickSort(v,left,right); left += 5 ; right += 5 ; &#125; //分组中项排序 for(int i = 0 ; i &lt; cnt ; ++i)&#123; m.push_back(v[tmp]); tmp += 5 ; &#125; QuickSort(m,0,m.size()-1); if(m.size() % 2 == 0)&#123;mm = m[m.size() / 2 - 1];&#125; else &#123;mm = m[(m.size()+1) / 2 - 1];&#125; //确定mm在原数组的位置 for(int i = 0 ; i &lt; v.size()-1 ; ++i)&#123;if(v[i] == mm)&#123;pos = i ; break;&#125;&#125; //分A,B,C三个数组 int numa = 0 , numb = 0 , numc = 0; divide(v,numa,numb,mm); numc = v.size() - numa - numb ; //cout&lt;&lt;mm&lt;&lt;endl; if(numa &gt; k )&#123; Search_K_Element(v,low,numa - 1, k); &#125; else if(numa + numb &gt;= v.size() / 2 ) &#123;return mm ;&#125; else &#123; Search_K_Element(v,numa + numb,numc - 1, k - numa - numb); &#125;&#125;int main()&#123; vector&lt;int&gt; v ; cout&lt;&lt;"请输入待寻找中项数组,以r字母结束"&lt;&lt;endl; while(1) &#123; int tmp = 0 ; int r =scanf("%d",&amp;tmp); if(r == 0)&#123;break;&#125; else &#123; v.push_back(tmp);&#125; &#125; fflush(stdin); int k ; cin &gt;&gt; k ; int result = Search_K_Element(v,0,v.size()-1,k); cout&lt;&lt;result&lt;&lt;endl; for(int i = 0 ; i&lt; v.size() ; ++i) &#123;cout &lt;&lt; v[i] &lt;&lt; " ";&#125; return 0;&#125; 谢谢访问]]></content>
+      <categories>
+        <category>算法课下实验</category>
+        <category>Search-K-Element</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[大整数乘法]]></title>
+    <url>%2F2019%2F10%2F16%2F%E5%A4%A7%E6%95%B4%E6%95%B0%E4%B9%98%E6%B3%95%2F</url>
+    <content type="text"><![CDATA[题目描述程序设计语言中的整型数据类型可以存放一定范围内的整数，超出这个范围的大整数就不能再用普通变量存储和操作，这样的整数通常被称为“大整数”。大整数的存储需要借助于数组或链表等，其操作也需要编写程序完成。 要求： 大整数的位数n≥16，可以是十进制或者二进制数。 两个大整数相乘如果按照传统的方法，需要耗费n2次数量相乘，试设计大整数乘法的分治算法，要求时间复杂度低于n2阶。 算法分析 我们采用分治算法，具体算法如下 我们将n位的二进制整数X和Y各分为2段，每段的长为n/2位（为简单起见，假设n是2的幂），有下图形式 计算公式为 XY = (A2^(n/2)+B)(C2^(n/2)+D)=AC2^n+(AD+CB)2^(n/2)+BD 对于2的n次方，我们采用左移n位即可，需要的时间为n。另外需要四次乘法以及三次加法，这蕴含下图递推式： ​ 由数学方法我们可知该算法时间复杂度为n^2 ​ 所以采用Toom—Cook算法对上面的算法进行优化： ​ wz + xy = (w + x )(y + z) -wy – xz ​ 再结合上面的算式，我们仅计算三次乘法以及次加减 运算，此中方法的递推式如下 经计算，使用Toom—Cook算法的时间复杂度为O(n^1.59)。 分治过程如下： 分: 将两个大整数分别分成四个较小整数 治：利用Toom—Cook算法进行计算 组合: 将每次算出的结果以字符串拼接相加 阈值： 这里设置阈值为4，不再分，并将运算结果返回 直接运算 ： 当数字的位数为4时，直接计算两数乘法。 参考代码/************************************************************************///函数功能：分治法求两个N为的整数的乘积//输入参数：X,Y分别为两个N为整数//h核心优化方程 ：uv = wy2n+[(w-x)(z-y)+wy+xz]2n/2+xz//时间复杂度为：T(n)=O(nlog3)=O(n1.59)/************************************************************************/#include &lt;bits/stdc++.h&gt;using namespace std;//C++数字转字符串string number_to_string(int m)&#123; stringstream ss ; ss &lt;&lt; m ; string re ; ss &gt;&gt; re ; return re;&#125;//C++字符串转数字int string_to_number(string m)&#123; stringstream ss(m); int s ; ss &gt;&gt; s ; return s ;&#125;//在数字前面加0string same_number_zero_before(string m , int s)&#123; for(int i = 0 ; i &lt; s ; ++i)&#123;m.insert(0,"0");&#125; return m ;&#125;//在数字后面加零string same_number_zero_follow(string m , int s)&#123; for(int i = 0 ; i &lt; s ; ++i) &#123;m.insert(m.size(),"0");&#125; return m ;&#125;//两个数字相加string string_add(string a , string b)&#123; if(a.size() &gt; b.size()) &#123;b = same_number_zero_before(b,a.size() - b.size()) ;&#125; else if(b.size() &gt; a.size()) &#123;a = same_number_zero_before(a,b.size() - a.size()) ;&#125; string result; int co = 0 ; for(int i = a.size() - 1 ; i &gt;= 0 ; --i)&#123; int c = (a[i] - '0') + (b[i] - '0') + co; co = c / 10 ; c %= 10 ; result.insert(0,number_to_string(c)); &#125; if(co != 0)&#123;result.insert(0,number_to_string(co));&#125; return result ;&#125;string string_sub(string a , string b)&#123; while(a[0] == '0' &amp;&amp; a.size() &gt; 1) &#123;a = a.substr(1,a.size()-1);&#125; while(b[0] == '0' &amp;&amp; b.size() &gt; 1) &#123;b = b.substr(1,b.size()-1);&#125; if(a.size() &gt; b.size())&#123; b = same_number_zero_before(b,a.size() - b.size());&#125; string result ; for(int i = a.size() - 1 ; i &gt;= 0 ; --i)&#123; int c = (a[i] - '0') - (b[i] - '0'); if(c &lt; 0)&#123; c += 10 ; int prepos = i -1 ; char prechar = a[prepos]; while(prechar == '0') &#123; a[prepos] = '9'; prepos = -1 ; prechar = a[prepos]; &#125; a[prepos] -= 1 ; &#125; result.insert(0,number_to_string(c)); &#125; return result;&#125;//计算string数字的乘法函数string multi(string u , string v)&#123; //首先将两个数前面的0去除,保留有效的计算位数 while(u[0] == '0' &amp;&amp; u.size() &gt; 1)&#123;u = u.substr(1,u.size()-1);&#125; while(v[0] == '0' &amp;&amp; v.size() &gt; 1)&#123;v = v.substr(1,v.size()-1);&#125; int n = 4 ; if(u.size() &gt; 2 || v.size() &gt; 2) &#123; if(u.size() &gt;= v.size()) &#123; //f为2的n次方位数大小，直到f的位数与x或者y中的 最大的 一个数 位数 相同或者大 停止 while(u.size() &gt; n)&#123; n *= 2 ;&#125; if(u.size() != n) &#123; //为了计算两个数，使u,v,f三个数位数相同 u = same_number_zero_before(u,n-u.size()); v = same_number_zero_before(v,n-v.size()); &#125; &#125; else &#123; //f为2的n次方大小，直到f的位数比x或者y中的最大的一个数位数大停止 while(v.size() &gt; n)&#123; n *= 2 ;&#125; if(v.size() != n) &#123; //为了计算两个数，使u,v,f三个数位数相同 u = same_number_zero_before(u,n-u.size()); v = same_number_zero_before(v,n-v.size()); &#125; &#125; &#125; //时刻保证u以及v有两位 if(u.size() == 1 )&#123;u = same_number_zero_before(u,1);&#125; if(v.size() == 1 )&#123;v = same_number_zero_before(v,1);&#125; //时刻保证u、v位数相同 if(u.size() &gt; v.size())&#123;v = same_number_zero_before(v,u.size() - v.size());&#125; if(u.size() &lt; v.size())&#123;u = same_number_zero_before(u,v.size() - u.size());&#125; //确定两数的位数 int num = u.size(); //分割u,v string w , x , y , z ; if(num &gt; 1)&#123; w = u.substr(0, num / 2 ); x = u.substr(num/2 , num - 1); y = v.substr(0, num / 2); z = v.substr(num / 2 , num - 1); &#125; string result ; //循环阈值为2，结束递归，回迭 if(num == 2 )&#123; int nw = string_to_number(w); int nx = string_to_number(x); int ny = string_to_number(y); int nz = string_to_number(z); result = number_to_string((nw*10 + nx)*(ny*10 +nz)); &#125; else &#123; string c1 = multi(w,y); string c2 = multi(x,z); string c11 = string_add(w,x); string c22 = string_add(y,z); string c33 = multi(c11,c22); string c44 = string_add(c1,c2); string c55 = string_sub(c33,c44); string ss1 = same_number_zero_follow(c55,num/ 2); string ss2 = same_number_zero_follow(c1 , num ); result = string_add(string_add(ss2,ss1),c2); &#125; return result;&#125;int main(int argc, char const *argv[])&#123; bool flag = true ; //循环计算多组大数乘法 while(flag) &#123; string u , v ; int sign = 0 ,sign1 = 0, sign2 = 0 ; //程序使用提示 cout&lt;&lt;"大整数 - 分治法 - C++版 - O(n^1.53)" &lt;&lt; endl ; //输入第一个数 cout&lt;&lt;"请输入第一个数"&lt;&lt;endl; bool inputfunction = true; while(inputfunction) &#123; cin&gt;&gt;u; int f = 0 ; for(int i = 1 ; i &lt; u.size() ; ++i) &#123; if(u[i] &lt; '0' || u[i] &gt; '9')&#123;cout&lt;&lt;"输入数据非法，请重新输入"&lt;&lt;endl;f = 1 ;break;&#125; &#125; if(f == 0)&#123;break;&#125; &#125; //输入第二个数 cout &lt;&lt; "请输入第二个数"&lt;&lt; endl; while(inputfunction) &#123; cin &gt;&gt; v; int f = 0 ; for(int i = 1 ; i &lt; v.size() ; ++i) &#123; if(v[i] &lt; '0' || v[i] &gt; '9')&#123;cout&lt;&lt;"输入数据非法，请重新输入"&lt;&lt;endl; f = 1 ;break;&#125; &#125; if(f == 0)&#123;break;&#125; &#125; //取出各个数字的符号位 if(u[0] != '-')&#123;sign1 = 1 ;&#125; else&#123;sign1 = -1;u = u.substr(1,u.size()-1);&#125; if(v[0] != '-')&#123;sign2 = 1 ;&#125; else&#123;sign2 = -1;v = v.substr(1,v.size()-1);&#125; //求出两数相乘符号位 sign = sign1 * sign2 ; //计算两个数的abs乘积值,并以string输出 string result = multi(u,v); while('0' == result[0] &amp;&amp; result.size() &gt; 1) &#123; result = result.substr(1,result.size() - 1); &#125; cout &lt;&lt; "结果："&lt;&lt;endl; if(sign == -1) &#123;cout&lt;&lt;'-';&#125; cout &lt;&lt; result &lt;&lt; endl; cout&lt;&lt;"继续请输入1，否则输入任意字符"&lt;&lt;endl; string s ; cin &gt;&gt; s ; if(s.size() == 1 &amp;&amp; s[0] == '1') &#123;continue;&#125; else &#123;break;&#125; &#125;&#125; 谢谢访问]]></content>
+      <categories>
+        <category>算法课下实验</category>
+        <category>Big-number-Multiple</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[冒泡排序]]></title>
     <url>%2F2019%2F09%2F15%2F%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F%2F</url>
     <content type="text"><![CDATA[冒泡排序冒泡排序是一种简单的排序算法。它重复地走访过要排序的数列，一次比较两个元素，如果它们的顺序错误就把它们交换过来。走访数列的工作是重复地进行直到没有再需要交换，也就是说该数列已经排序完成。这个算法的名字由来是因为越小的元素会经由交换慢慢“浮”到数列的顶端。 算法描述 比较相邻的元素。如果第一个比第二个大，就交换它们两个； 对每一对相邻元素作同样的工作，从开始第一对到结尾的最后一对，这样在最后的元素应该会是最大的数； 针对所有的元素重复以上的步骤，除了最后一个； 重复步骤1~3，直到排序完成。 算法图解 算法分析最好情况：数组已满足要求排序顺序，此时只需要n-1比较 最坏情况：数组与要求排序顺序刚好相反。此时比较次数 1/2(n^2 - n)次，需要赋值次数3/2(n^2-n)次 综合，时间复杂度为O(n^2) 参考代码void Bubble_Sort(int a[], int N)&#123; int i = 0, j = 0, flag = 0; for (i = 0; i &lt; N; ++i) &#123; for (j = 0; j &lt; N - i; ++j) &#123; int temp = 0; if (a[j + 1] &lt; a[j]) &#123; temp = a[j + 1]; a[j + 1] = a[j]; a[j] = temp; flag = 1; &#125; &#125; if (flag) &#123; break; &#125; &#125;&#125; 谢谢访问]]></content>
@@ -21,8 +45,8 @@
         <category>Double Point</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>leetcode</tag>
+        <tag>C++</tag>
         <tag>算法</tag>
       </tags>
   </entry>
@@ -47,8 +71,8 @@
         <category>Double Point</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>leetcode</tag>
+        <tag>C++</tag>
         <tag>算法</tag>
       </tags>
   </entry>
@@ -61,8 +85,8 @@
         <category>Double Point</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>leetcode</tag>
+        <tag>C++</tag>
         <tag>算法</tag>
       </tags>
   </entry>
@@ -86,8 +110,8 @@
         <category>Double Point</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>leetcode</tag>
+        <tag>C++</tag>
         <tag>算法</tag>
       </tags>
   </entry>
@@ -100,8 +124,8 @@
         <category>Array</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>leetcode</tag>
+        <tag>C++</tag>
         <tag>算法</tag>
       </tags>
   </entry>
@@ -114,8 +138,8 @@
         <category>Array</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>leetcode</tag>
+        <tag>C++</tag>
         <tag>算法</tag>
       </tags>
   </entry>
@@ -128,8 +152,8 @@
         <category>Array</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>leetcode</tag>
+        <tag>C++</tag>
         <tag>算法</tag>
       </tags>
   </entry>
@@ -142,8 +166,8 @@
         <category>Array</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>leetcode</tag>
+        <tag>C++</tag>
         <tag>算法</tag>
       </tags>
   </entry>
@@ -157,8 +181,8 @@
         <category>Array&amp;&amp;String</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>leetcode</tag>
+        <tag>C++</tag>
         <tag>算法</tag>
       </tags>
   </entry>
@@ -172,8 +196,8 @@
         <category>Queue&amp;&amp;Stack</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>leetcode</tag>
+        <tag>C++</tag>
         <tag>算法</tag>
       </tags>
   </entry>
@@ -187,8 +211,8 @@
         <category>BFS</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>leetcode</tag>
+        <tag>C++</tag>
         <tag>算法</tag>
       </tags>
   </entry>
@@ -202,8 +226,8 @@
         <category>BFS</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>leetcode</tag>
+        <tag>C++</tag>
         <tag>算法</tag>
       </tags>
   </entry>
@@ -217,8 +241,8 @@
         <category>BFS</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>leetcode</tag>
+        <tag>C++</tag>
         <tag>算法</tag>
       </tags>
   </entry>
@@ -231,8 +255,8 @@
         <category>Queue</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>leetcode</tag>
+        <tag>C++</tag>
         <tag>算法</tag>
       </tags>
   </entry>
@@ -245,8 +269,8 @@
         <category>Queue</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>leetcode</tag>
+        <tag>C++</tag>
         <tag>算法</tag>
       </tags>
   </entry>
@@ -284,8 +308,8 @@
         <category>Stack</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>leetcode</tag>
+        <tag>C++</tag>
         <tag>算法</tag>
       </tags>
   </entry>
@@ -298,8 +322,8 @@
         <category>Stack</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>leetcode</tag>
+        <tag>C++</tag>
         <tag>算法</tag>
       </tags>
   </entry>
@@ -312,8 +336,8 @@
         <category>week150</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>leetcode</tag>
+        <tag>C++</tag>
         <tag>算法</tag>
       </tags>
   </entry>
@@ -326,8 +350,8 @@
         <category>week150</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>leetcode</tag>
+        <tag>C++</tag>
         <tag>算法</tag>
       </tags>
   </entry>
@@ -340,8 +364,8 @@
         <category>week150</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>leetcode</tag>
+        <tag>C++</tag>
         <tag>算法</tag>
       </tags>
   </entry>
@@ -545,8 +569,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>旗舰学科</tag>
         <tag>算法</tag>
+        <tag>旗舰学科</tag>
         <tag>数据结构</tag>
       </tags>
   </entry>
@@ -606,8 +630,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>旗舰学科</tag>
         <tag>算法</tag>
+        <tag>旗舰学科</tag>
       </tags>
   </entry>
   <entry>
@@ -634,8 +658,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>旗舰学科</tag>
         <tag>算法</tag>
+        <tag>旗舰学科</tag>
         <tag>数据结构</tag>
       </tags>
   </entry>
