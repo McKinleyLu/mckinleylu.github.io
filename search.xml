@@ -3,7 +3,7 @@
   <entry>
     <title><![CDATA[寻找中项和第k小元素]]></title>
     <url>%2F2019%2F10%2F16%2F%E5%AF%BB%E6%89%BE%E4%B8%AD%E9%A1%B9%E5%92%8C%E7%AC%ACk%E5%B0%8F%E5%85%83%E7%B4%A0%E3%80%81%2F</url>
-    <content type="text"><![CDATA[问题描述在统计学领域中，中项是一个非常关键的常用的指标值。序列的中项是指排好序后序列的“中间”元素，中项是指序列的第[n/2]个最小元素。寻找序列中项的问题被称为中项值问题，寻找序列中第k小元素的问题被称为选择问题。 要求： 元素个数n≥100。 请利用减治的思想，设计该问题的分治算法。 采用两种划分的方式：教材上的方法和随机选择的方法，并对比两种方法的性能 算法分析 我们采用分治算法，具体算法如下我们将n位的二进制整数X和Y各分为2段，每段的长为n/2位（为简单起见，假设n是2的幂），有下图形式 计算公式为 XY = (A2^(n/2)+B)(C2^(n/2)+D)=AC2^n+(AD+CB)2^(n/2)+BD 对于2的n次方，我们采用左移n位即可，需要的时间为n。另外需要四次乘法以及三次加法，这蕴含下图递推式： 由数学方法我们可知该算法时间复杂度为n^2 所以采用Toom—Cook算法对上面的算法进行优化 wz + xy = (w + x )(y + z) -wy – xz 再结合上面的算式，我们仅计算三次乘法以及6次加减运算，此中方法的递推式如下 经计算，使用Toom—Cook算法的时间复杂度为O(n^1.59)。 分治过程如下 分: 将两个大整数分别分成四个较小整数 治：利用Toom—Cook算法进行计算 组合: 将每次算出的结果以字符串拼接相加 阈值： 这里设置阈值为4，不再分，并将运算结果返回直接运算 参考代码#include &lt;bits/stdc++.h&gt;using namespace std;void QuickSort(vector&lt;int&gt; &amp;a, int left, int right) &#123; if(left &lt; right) &#123; int i = left, j = right, k = a[left]; //利用循环，使基准左边数字均小于基准，右边均大于基准 while (i &lt; j) &#123; while (i &lt; j &amp;&amp; a[j] &lt; k) &#123; --j; &#125; //从右向左找到第一个比基准大的数 if (i &lt; j) &#123; a[i++] = a[j]; &#125; while (i &lt; j &amp;&amp; a[i] &gt; k) &#123; ++i; &#125; //从左向右找到第一个比基准小的数 if (i &lt; j) &#123; a[j--] = a[i]; &#125; &#125; a[i] = k; QuickSort(a, left, i - 1); // 排序k左边 QuickSort(a, i + 1, right); // 排序k右边 &#125;&#125;void divide(vector&lt;int&gt;&amp;a,int &amp;numa, int &amp; numb ,const int mm)&#123; int i = 0 , j = a.size()-1 , k = mm; //利用循环，使基准左边数字均小于基准，右边均大于基准 while (i &lt; j) &#123; while (i &lt; j &amp;&amp; a[j] &lt; k) &#123; --j; &#125; //从右向左找到第一个比基准大的数 if (i &lt; j) &#123; a[i++] = a[j]; &#125; while (i &lt; j &amp;&amp; a[i] &gt; k) &#123; ++i; &#125; //从左向右找到第一个比基准小的数 if (i &lt; j) &#123; a[j--] = a[i]; &#125; &#125; a[i] = mm; for(int i = 0 ; i &lt; a.size()-1 ;++i)&#123;if(a[i] == mm)&#123;numb++;&#125;&#125; numa = i + 1 ;&#125;int Search_K_Element(vector&lt;int&gt;&amp;v,int low,int high,int k)&#123; int p = high - low + 1; if(p &lt; 44) &#123; QuickSort(v,low,high); return v[v.size() / 2]; &#125; vector&lt;int&gt; m ; int tmp = 2 , mm = 0,pos = 0; //分组并排序 int cnt = (high - low + 1)/ 5 ; int left = low ,right = low + 4 ; for(int i = 0 ; i &lt; cnt ; ++i)&#123; QuickSort(v,left,right); left += 5 ; right += 5 ; &#125; //分组中项排序 for(int i = 0 ; i &lt; cnt ; ++i)&#123; m.push_back(v[tmp]); tmp += 5 ; &#125; QuickSort(m,0,m.size()-1); if(m.size() % 2 == 0)&#123;mm = m[m.size() / 2 - 1];&#125; else &#123;mm = m[(m.size()+1) / 2 - 1];&#125; //确定mm在原数组的位置 for(int i = 0 ; i &lt; v.size()-1 ; ++i)&#123;if(v[i] == mm)&#123;pos = i ; break;&#125;&#125; //分A,B,C三个数组 int numa = 0 , numb = 0 , numc = 0; divide(v,numa,numb,mm); numc = v.size() - numa - numb ; //cout&lt;&lt;mm&lt;&lt;endl; if(numa &gt; k )&#123; Search_K_Element(v,low,numa - 1, k); &#125; else if(numa + numb &gt;= v.size() / 2 ) &#123;return mm ;&#125; else &#123; Search_K_Element(v,numa + numb,numc - 1, k - numa - numb); &#125;&#125;int main()&#123; vector&lt;int&gt; v ; cout&lt;&lt;"请输入待寻找中项数组,以r字母结束"&lt;&lt;endl; while(1) &#123; int tmp = 0 ; int r =scanf("%d",&amp;tmp); if(r == 0)&#123;break;&#125; else &#123; v.push_back(tmp);&#125; &#125; fflush(stdin); int k ; cin &gt;&gt; k ; int result = Search_K_Element(v,0,v.size()-1,k); cout&lt;&lt;result&lt;&lt;endl; for(int i = 0 ; i&lt; v.size() ; ++i) &#123;cout &lt;&lt; v[i] &lt;&lt; " ";&#125; return 0;&#125; 谢谢访问]]></content>
+    <content type="text"><![CDATA[问题描述在统计学领域中，中项是一个非常关键的常用的指标值。序列的中项是指排好序后序列的“中间”元素，中项是指序列的第[n/2]个最小元素。寻找序列中项的问题被称为中项值问题，寻找序列中第k小元素的问题被称为选择问题。 要求： 元素个数n≥100。 请利用减治的思想，设计该问题的分治算法。 采用两种划分的方式：教材上的方法和随机选择的方法，并对比两种方法的性能 问题分析在平常寻找向量(数组、容器)数值第k个元素时，我们一般使用快速排序将元素按指定规则排序，则第k个元素位置即排好序的第k-1向量位置。这种方法平均时间复杂度为O(nlogn – n +1)。 这里，我们采用分治方法，降低时间复杂度为线性。 算法设计 先将数组按照每五个分为一组，剩下多余元素排去 其次将分好的数组用快排排序，时间为cn(c约等于7)，所以时间消耗为线性阶 去各分组数组的中值构成一个新数组，并求出新数组中值mm。时间消耗为线性阶 根据中值mm，将中值mm设置为基准，原数组根据mm划成三个集合A，B，C。(A中元素值小于mm,B中元素值等于mm，C中元素值大于mm) 根据如下情况进行下一步 如果A集合数字个数大于K，则返回select(A,0,high,k) 如果A + B 集合的数字个数等于K，则mm即位所求，返回mm即可 否则 select(C,0,high,k) 分治过程如下 分：将数组分按照mm为三个集合 治：判断k在哪个集合，不同集合治法不同 组合： 这里涉及到了简治，即排除不可能为所寻找元素，降低了时间复杂度 阈值：当集合值为mm时，返回mm。 参考代码#include &lt;bits/stdc++.h&gt;using namespace std;void QuickSort(vector&lt;int&gt; &amp;a, int left, int right) &#123; if(left &lt; right) &#123; int i = left, j = right, k = a[left]; //利用循环，使基准左边数字均小于基准，右边均大于基准 while (i &lt; j) &#123; while (i &lt; j &amp;&amp; a[j] &lt; k) &#123; --j; &#125; //从右向左找到第一个比基准大的数 if (i &lt; j) &#123; a[i++] = a[j]; &#125; while (i &lt; j &amp;&amp; a[i] &gt; k) &#123; ++i; &#125; //从左向右找到第一个比基准小的数 if (i &lt; j) &#123; a[j--] = a[i]; &#125; &#125; a[i] = k; QuickSort(a, left, i - 1); // 排序k左边 QuickSort(a, i + 1, right); // 排序k右边 &#125;&#125;void divide(vector&lt;int&gt;&amp;a,int &amp;numa, int &amp; numb ,const int mm)&#123; int i = 0 , j = a.size()-1 , k = mm; //利用循环，使基准左边数字均小于基准，右边均大于基准 while (i &lt; j) &#123; while (i &lt; j &amp;&amp; a[j] &lt; k) &#123; --j; &#125; //从右向左找到第一个比基准大的数 if (i &lt; j) &#123; a[i++] = a[j]; &#125; while (i &lt; j &amp;&amp; a[i] &gt; k) &#123; ++i; &#125; //从左向右找到第一个比基准小的数 if (i &lt; j) &#123; a[j--] = a[i]; &#125; &#125; a[i] = mm; for(int i = 0 ; i &lt; a.size()-1 ;++i)&#123;if(a[i] == mm)&#123;numb++;&#125;&#125; numa = i + 1 ;&#125;int Search_K_Element(vector&lt;int&gt;&amp;v,int low,int high,int k)&#123; int p = high - low + 1; if(p &lt; 44) &#123; QuickSort(v,low,high); return v[v.size() / 2]; &#125; vector&lt;int&gt; m ; int tmp = 2 , mm = 0,pos = 0; //分组并排序 int cnt = (high - low + 1)/ 5 ; int left = low ,right = low + 4 ; for(int i = 0 ; i &lt; cnt ; ++i)&#123; QuickSort(v,left,right); left += 5 ; right += 5 ; &#125; //分组中项排序 for(int i = 0 ; i &lt; cnt ; ++i)&#123; m.push_back(v[tmp]); tmp += 5 ; &#125; QuickSort(m,0,m.size()-1); if(m.size() % 2 == 0)&#123;mm = m[m.size() / 2 - 1];&#125; else &#123;mm = m[(m.size()+1) / 2 - 1];&#125; //确定mm在原数组的位置 for(int i = 0 ; i &lt; v.size()-1 ; ++i)&#123;if(v[i] == mm)&#123;pos = i ; break;&#125;&#125; //分A,B,C三个数组 int numa = 0 , numb = 0 , numc = 0; divide(v,numa,numb,mm); numc = v.size() - numa - numb ; //cout&lt;&lt;mm&lt;&lt;endl; if(numa &gt; k )&#123; Search_K_Element(v,low,numa - 1, k); &#125; else if(numa + numb &gt;= v.size() / 2 ) &#123;return mm ;&#125; else &#123; Search_K_Element(v,numa + numb,numc - 1, k - numa - numb); &#125;&#125;int main()&#123; vector&lt;int&gt; v ; cout&lt;&lt;"请输入待寻找中项数组,以r字母结束"&lt;&lt;endl; while(1) &#123; int tmp = 0 ; int r =scanf("%d",&amp;tmp); if(r == 0)&#123;break;&#125; else &#123; v.push_back(tmp);&#125; &#125; fflush(stdin); int k ; cin &gt;&gt; k ; int result = Search_K_Element(v,0,v.size()-1,k); cout&lt;&lt;result&lt;&lt;endl; for(int i = 0 ; i&lt; v.size() ; ++i) &#123;cout &lt;&lt; v[i] &lt;&lt; " ";&#125; return 0;&#125; 谢谢访问]]></content>
       <categories>
         <category>算法课下实验</category>
         <category>Search-K-Element</category>
@@ -45,9 +45,9 @@
         <category>Double Point</category>
       </categories>
       <tags>
-        <tag>leetcode</tag>
         <tag>C++</tag>
         <tag>算法</tag>
+        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -71,9 +71,9 @@
         <category>Double Point</category>
       </categories>
       <tags>
-        <tag>leetcode</tag>
         <tag>C++</tag>
         <tag>算法</tag>
+        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -85,9 +85,9 @@
         <category>Double Point</category>
       </categories>
       <tags>
-        <tag>leetcode</tag>
         <tag>C++</tag>
         <tag>算法</tag>
+        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -110,9 +110,9 @@
         <category>Double Point</category>
       </categories>
       <tags>
-        <tag>leetcode</tag>
         <tag>C++</tag>
         <tag>算法</tag>
+        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -124,9 +124,9 @@
         <category>Array</category>
       </categories>
       <tags>
-        <tag>leetcode</tag>
         <tag>C++</tag>
         <tag>算法</tag>
+        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -138,9 +138,9 @@
         <category>Array</category>
       </categories>
       <tags>
-        <tag>leetcode</tag>
         <tag>C++</tag>
         <tag>算法</tag>
+        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -152,9 +152,9 @@
         <category>Array</category>
       </categories>
       <tags>
-        <tag>leetcode</tag>
         <tag>C++</tag>
         <tag>算法</tag>
+        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -166,9 +166,9 @@
         <category>Array</category>
       </categories>
       <tags>
-        <tag>leetcode</tag>
         <tag>C++</tag>
         <tag>算法</tag>
+        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -181,9 +181,9 @@
         <category>Array&amp;&amp;String</category>
       </categories>
       <tags>
-        <tag>leetcode</tag>
         <tag>C++</tag>
         <tag>算法</tag>
+        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -196,9 +196,9 @@
         <category>Queue&amp;&amp;Stack</category>
       </categories>
       <tags>
-        <tag>leetcode</tag>
         <tag>C++</tag>
         <tag>算法</tag>
+        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -211,9 +211,9 @@
         <category>BFS</category>
       </categories>
       <tags>
-        <tag>leetcode</tag>
         <tag>C++</tag>
         <tag>算法</tag>
+        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -226,9 +226,9 @@
         <category>BFS</category>
       </categories>
       <tags>
-        <tag>leetcode</tag>
         <tag>C++</tag>
         <tag>算法</tag>
+        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -241,9 +241,9 @@
         <category>BFS</category>
       </categories>
       <tags>
-        <tag>leetcode</tag>
         <tag>C++</tag>
         <tag>算法</tag>
+        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -255,9 +255,9 @@
         <category>Queue</category>
       </categories>
       <tags>
-        <tag>leetcode</tag>
         <tag>C++</tag>
         <tag>算法</tag>
+        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -269,9 +269,9 @@
         <category>Queue</category>
       </categories>
       <tags>
-        <tag>leetcode</tag>
         <tag>C++</tag>
         <tag>算法</tag>
+        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -308,9 +308,9 @@
         <category>Stack</category>
       </categories>
       <tags>
-        <tag>leetcode</tag>
         <tag>C++</tag>
         <tag>算法</tag>
+        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -322,9 +322,9 @@
         <category>Stack</category>
       </categories>
       <tags>
-        <tag>leetcode</tag>
         <tag>C++</tag>
         <tag>算法</tag>
+        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -336,9 +336,9 @@
         <category>week150</category>
       </categories>
       <tags>
-        <tag>leetcode</tag>
         <tag>C++</tag>
         <tag>算法</tag>
+        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -350,9 +350,9 @@
         <category>week150</category>
       </categories>
       <tags>
-        <tag>leetcode</tag>
         <tag>C++</tag>
         <tag>算法</tag>
+        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -364,9 +364,9 @@
         <category>week150</category>
       </categories>
       <tags>
-        <tag>leetcode</tag>
         <tag>C++</tag>
         <tag>算法</tag>
+        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
@@ -393,8 +393,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>算法</tag>
         <tag>PAT</tag>
+        <tag>算法</tag>
       </tags>
   </entry>
   <entry>
@@ -407,8 +407,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>算法</tag>
         <tag>PAT</tag>
+        <tag>算法</tag>
       </tags>
   </entry>
   <entry>
@@ -421,8 +421,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>算法</tag>
         <tag>PAT</tag>
+        <tag>算法</tag>
       </tags>
   </entry>
   <entry>
@@ -435,8 +435,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>算法</tag>
         <tag>PAT</tag>
+        <tag>算法</tag>
       </tags>
   </entry>
   <entry>
@@ -449,8 +449,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>算法</tag>
         <tag>PAT</tag>
+        <tag>算法</tag>
       </tags>
   </entry>
   <entry>
@@ -463,8 +463,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>算法</tag>
         <tag>PAT</tag>
+        <tag>算法</tag>
       </tags>
   </entry>
   <entry>
@@ -477,8 +477,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>算法</tag>
         <tag>PAT</tag>
+        <tag>算法</tag>
       </tags>
   </entry>
   <entry>
@@ -490,8 +490,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>竞赛</tag>
         <tag>PAT</tag>
+        <tag>竞赛</tag>
         <tag>蓝桥杯</tag>
       </tags>
   </entry>
@@ -569,8 +569,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>算法</tag>
         <tag>旗舰学科</tag>
+        <tag>算法</tag>
         <tag>数据结构</tag>
       </tags>
   </entry>
@@ -630,8 +630,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>算法</tag>
         <tag>旗舰学科</tag>
+        <tag>算法</tag>
       </tags>
   </entry>
   <entry>
@@ -658,8 +658,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>算法</tag>
         <tag>旗舰学科</tag>
+        <tag>算法</tag>
         <tag>数据结构</tag>
       </tags>
   </entry>

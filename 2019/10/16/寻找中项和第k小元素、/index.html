@@ -16,7 +16,7 @@ if (isPassword) {
     error: '复制错误',
     noSupport: '浏览器不支持'
   }
-}</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></head><body><canvas id="universe"></canvas><!--#body--><div id="sidebar"><div class="toggle-sidebar-info button-hover"><span data-toggle="文章目录">站点概览</span></div><div class="sidebar-toc"><div class="sidebar-toc-title">目录</div><div class="sidebar-toc-progress"><span class="progress-notice">您已阅读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc-progress-bar"></div></div><div class="sidebar-toc-content" id="sidebar-toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#问题描述"><span class="toc-number">1.</span> <span class="toc-text">问题描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#算法分析"><span class="toc-number">2.</span> <span class="toc-text">算法分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参考代码"><span class="toc-number">3.</span> <span class="toc-text">参考代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#谢谢访问"><span class="toc-number">4.</span> <span class="toc-text">谢谢访问</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info-avatar"><img class="author-info-avatar-img" src="/avatarmy.jpeg"></div><div class="author-info-name">McKinley Lu</div><div class="author-info-description">我们的梦想是星辰大海</div><div class="links-buttons"><a class="links-button button-hover" href="https://github.com/McKinleyLu" target="_blank">GitHub<i class="icon-dot bg-color2"></i></a><a class="links-button button-hover" href="mailto:lt981109@gmail.com" target="_blank">E-Mail<i class="icon-dot bg-color6"></i></a><a class="links-button button-hover" href="tencent://message/?uin=1433059961&amp;Site=&amp;Menu=yes" target="_blank">QQ<i class="icon-dot bg-color8"></i></a><a class="links-button button-hover" href="https://me.csdn.net/LuTong2018" target="_blank">CSDN<i class="icon-dot bg-color3"></i></a><a class="links-button button-hover" href="https://www.luogu.org/space/show?uid=206308" target="_blank">洛谷<i class="icon-dot bg-color1"></i></a></div><div class="author-info-articles"><a class="author-info-articles-archives article-meta" href="/archives"><span class="pull-top">日志</span><span class="pull-bottom">48</span></a><a class="author-info-articles-tags article-meta" href="/tags"><span class="pull-top">标签</span><span class="pull-bottom">15</span></a><a class="author-info-articles-categories article-meta" href="/categories"><span class="pull-top">分类</span><span class="pull-bottom">31</span></a></div><div class="friend-link"><a class="friend-link-text" href="https://huowuyan.cn/" target="_blank">推荐阅读  ||  星海</a><a class="friend-link-text" href="https://dushihao-du.github.io/" target="_blank">推荐阅读  ||  士豪</a></div></div></div><div id="main-container"><header><div id="menu-outer"><i class="menu-list-icon fas fa-bars"></i><nav id="menu-inner"><a class="menu-item" href="/">首页</a><a class="menu-item" href="/tags">标签</a><a class="menu-item" href="/categories">分类</a><a class="menu-item" href="/archives">归档</a><a class="menu-item" href="/about">关于</a></nav><div class="right-info"><a class="search social-icon"><i class="fas fa-search"></i><span> 搜索</span></a><a class="title-name" href="/">星辰</a><span id="now-time"></span></div></div></header><div id="content-outer"><div id="content-inner"><article id="post"><div class="post-header"><div class="title">寻找中项和第k小元素</div><div class="container"><time class="button-hover post-date"><i class="fas fa-calendar-alt article-icon" aria-hidden="true"></i> 发表于 2019-10-16 | 更新于 2019-10-16</time><!--time.button-hover.post-date #[i.fas.fa-calendar-alt.article-icon(aria-hidden="true")] #[=__('post.modified')] #[=date(page['updated'], config.date_format)]--><div class="button-hover categories"><i class="fa fa-inbox article-icon" aria-hidden="true"></i><a class="link-a" href="/categories/算法课下实验/">算法课下实验</a><i class="fa fa-angle-right" style="margin: 0 8px;"></i><i class="fa fa-inbox article-icon" aria-hidden="true"></i><a class="link-a" href="/categories/算法课下实验/Search-K-Element/">Search-K-Element</a></div><div class="button-hover tags"><i class="fa fa-tag article-icon" aria-hidden="true"></i><a class="link-a" href="/tags/算法/">算法</a></div></div></div><div class="main-content"><h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>在统计学领域中，中项是一个非常关键的常用的指标值。序列的中项是指排好序后序列的“中间”元素，中项是指序列的第[n/2]个最小元素。寻找序列中项的问题被称为中项值问题，寻找序列中第k小元素的问题被称为选择问题。<a id="more"></a>  </p>
+}</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></head><body><canvas id="universe"></canvas><!--#body--><div id="sidebar"><div class="toggle-sidebar-info button-hover"><span data-toggle="文章目录">站点概览</span></div><div class="sidebar-toc"><div class="sidebar-toc-title">目录</div><div class="sidebar-toc-progress"><span class="progress-notice">您已阅读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc-progress-bar"></div></div><div class="sidebar-toc-content" id="sidebar-toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#问题描述"><span class="toc-number">1.</span> <span class="toc-text">问题描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#问题分析"><span class="toc-number">2.</span> <span class="toc-text">问题分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#算法设计"><span class="toc-number">3.</span> <span class="toc-text">算法设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参考代码"><span class="toc-number">4.</span> <span class="toc-text">参考代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#谢谢访问"><span class="toc-number">5.</span> <span class="toc-text">谢谢访问</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info-avatar"><img class="author-info-avatar-img" src="/avatarmy.jpeg"></div><div class="author-info-name">McKinley Lu</div><div class="author-info-description">我们的梦想是星辰大海</div><div class="links-buttons"><a class="links-button button-hover" href="https://github.com/McKinleyLu" target="_blank">GitHub<i class="icon-dot bg-color8"></i></a><a class="links-button button-hover" href="mailto:lt981109@gmail.com" target="_blank">E-Mail<i class="icon-dot bg-color9"></i></a><a class="links-button button-hover" href="tencent://message/?uin=1433059961&amp;Site=&amp;Menu=yes" target="_blank">QQ<i class="icon-dot bg-color5"></i></a><a class="links-button button-hover" href="https://me.csdn.net/LuTong2018" target="_blank">CSDN<i class="icon-dot bg-color7"></i></a><a class="links-button button-hover" href="https://www.luogu.org/space/show?uid=206308" target="_blank">洛谷<i class="icon-dot bg-color2"></i></a></div><div class="author-info-articles"><a class="author-info-articles-archives article-meta" href="/archives"><span class="pull-top">日志</span><span class="pull-bottom">48</span></a><a class="author-info-articles-tags article-meta" href="/tags"><span class="pull-top">标签</span><span class="pull-bottom">15</span></a><a class="author-info-articles-categories article-meta" href="/categories"><span class="pull-top">分类</span><span class="pull-bottom">31</span></a></div><div class="friend-link"><a class="friend-link-text" href="https://huowuyan.cn/" target="_blank">推荐阅读  ||  星海</a><a class="friend-link-text" href="https://dushihao-du.github.io/" target="_blank">推荐阅读  ||  士豪</a></div></div></div><div id="main-container"><header><div id="menu-outer"><i class="menu-list-icon fas fa-bars"></i><nav id="menu-inner"><a class="menu-item" href="/">首页</a><a class="menu-item" href="/tags">标签</a><a class="menu-item" href="/categories">分类</a><a class="menu-item" href="/archives">归档</a><a class="menu-item" href="/about">关于</a></nav><div class="right-info"><a class="search social-icon"><i class="fas fa-search"></i><span> 搜索</span></a><a class="title-name" href="/">星辰</a><span id="now-time"></span></div></div></header><div id="content-outer"><div id="content-inner"><article id="post"><div class="post-header"><div class="title">寻找中项和第k小元素</div><div class="container"><time class="button-hover post-date"><i class="fas fa-calendar-alt article-icon" aria-hidden="true"></i> 发表于 2019-10-16 | 更新于 2019-10-20</time><!--time.button-hover.post-date #[i.fas.fa-calendar-alt.article-icon(aria-hidden="true")] #[=__('post.modified')] #[=date(page['updated'], config.date_format)]--><div class="button-hover categories"><i class="fa fa-inbox article-icon" aria-hidden="true"></i><a class="link-a" href="/categories/算法课下实验/">算法课下实验</a><i class="fa fa-angle-right" style="margin: 0 8px;"></i><i class="fa fa-inbox article-icon" aria-hidden="true"></i><a class="link-a" href="/categories/算法课下实验/Search-K-Element/">Search-K-Element</a></div><div class="button-hover tags"><i class="fa fa-tag article-icon" aria-hidden="true"></i><a class="link-a" href="/tags/算法/">算法</a></div></div></div><div class="main-content"><h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>在统计学领域中，中项是一个非常关键的常用的指标值。序列的中项是指排好序后序列的“中间”元素，中项是指序列的第[n/2]个最小元素。寻找序列中项的问题被称为中项值问题，寻找序列中第k小元素的问题被称为选择问题。<a id="more"></a>  </p>
 <!-- hexo-inject:begin --><!-- hexo-inject:end --><p>要求：</p>
 <ol>
 <li><p>元素个数n≥100。</p>
@@ -25,31 +25,28 @@ if (isPassword) {
 </li>
 <li>采用两种划分的方式：教材上的方法和随机选择的方法，并对比两种方法的性能</li>
 </ol>
-<h3 id="算法分析"><a href="#算法分析" class="headerlink" title="算法分析"></a>算法分析</h3><ol>
-<li><p>我们采用分治算法，具体算法如下我们将n位的二进制整数X和Y各分为2段，每段的长为n/2位（为简单起见，假设n是2的幂），有下图形式</p>
-<p><img src="/images/3-4.jpg" style=" margin:0 auto;  "></p>
+<h3 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h3><p>在平常寻找向量(数组、容器)数值第k个元素时，我们一般使用快速排序将元素按指定规则排序，则第k个元素位置即排好序的第k-1向量位置。这种方法平均时间复杂度为O(nlogn – n +1)。</p>
+<p>这里，我们采用分治方法，降低时间复杂度为线性。</p>
+<h3 id="算法设计"><a href="#算法设计" class="headerlink" title="算法设计"></a>算法设计</h3><ol>
+<li><p>先将数组按照每五个分为一组，剩下多余元素排去</p>
 </li>
-<li><p>计算公式为  <strong>XY = (A2^(n/2)+B)(C2^(n/2)+D)=AC2^n+(AD+CB)2^(n/2)+BD</strong></p>
-<p>对于2的n次方，我们采用左移n位即可，需要的时间为n。另外需要四次乘法以及三次加法，这蕴含下图递推式：</p>
-<p><img src="/images/3-5.jpg" style=" margin:0 auto;  "></p>
+<li><p>其次将分好的数组用快排排序，时间为cn(c约等于7)，所以时间消耗为线性阶</p>
 </li>
-<li><p>由数学方法我们可知该算法时间复杂度为n^2</p>
-<p>所以采用Toom—Cook算法对上面的算法进行优化</p>
-<p><strong>wz + xy = (w + x )(y + z) -wy – xz</strong></p>
-<p>再结合上面的算式，我们仅计算三次乘法以及6次加减运算，此中方法的递推式如下</p>
-<p><img src="/images/3-6.jpg" style=" margin:0 auto;  "></p>
-<p>经计算，使用Toom—Cook算法的时间复杂度为O(n^1.59)。</p>
+<li><p>去各分组数组的中值构成一个新数组，并求出新数组中值mm。时间消耗为线性阶</p>
+</li>
+<li><p>根据中值mm，将中值mm设置为基准，原数组根据mm划成三个集合A，B，C。(A中元素值小于mm,B中元素值等于mm，C中元素值大于mm)</p>
+</li>
+<li><p>根据如下情况进行下一步</p>
+<p>如果A集合数字个数大于K，则返回select(A,0,high,k)</p>
+<p>如果A + B 集合的数字个数等于K，则mm即位所求，返回mm即可</p>
+<p>否则 select(C,0,high,k)</p>
 </li>
 <li><p>分治过程如下</p>
 <ul>
-<li><p>分: 将两个大整数分别分成四个较小整数</p>
-</li>
-<li><p>治：利用Toom—Cook算法进行计算</p>
-</li>
-<li><p>组合:  将每次算出的结果以字符串拼接相加</p>
-</li>
-<li><p>阈值： 这里设置阈值为4，不再分，并将运算结果返回直接运算  </p>
-</li>
+<li>分：将数组分按照mm为三个集合</li>
+<li>治：判断k在哪个集合，不同集合治法不同</li>
+<li>组合： 这里涉及到了简治，即排除不可能为所寻找元素，降低了时间复杂度</li>
+<li>阈值：当集合值为mm时，返回mm。</li>
 </ul>
 </li>
 </ol>
