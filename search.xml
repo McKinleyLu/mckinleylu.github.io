@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Base TSP]]></title>
+    <url>%2F2019%2F11%2F10%2FBase-TSP%2F</url>
+    <content type="text"><![CDATA[问题描述已知图G=(V,E)，利用贪心策略求解图G上的从顶点1出发的最短巡回旅行路线，要求输出找到的(近似)最短巡回旅行路线。 要求：给出问题的贪心算法，并编程实现 问题分析本题类似邮递员问题，从图中任意一个出发，首先寻找起始点到所有点距离最近 的点，找到后，新的点再找离它最近的点，知道回到出发点，即位所求最短路径。这种思路显然为贪心思路。简洁总结如下： 从某个城市开始，每次选择一个城市，知道所有的城市都被走完 每次只选择到下一个城市最近的路线所对应的城市 算法设计(1) 从文件读入内存数据，时间复杂度为线性O(n) (2) 邻接矩阵储存顶点之间的边的长度。 (3) 使用双重循环，从起点开始，依次找到最短路径上的顶点： 具体思路如下： 开始时X = {起点a}，Y = {顶点b，顶点c，顶点d} 确定起点到另外三个顶点中最短的一个顶点路径，并将b号顶点加入X集合，此时X ={a,b}，Y ={c,d} 按照每次只加入离当前顶点最近的顶点，知道Y集合为空。 时间复杂度为O(n^2) 综上所述，时间复杂度为O(n^2) 参考代码#include &lt;bits/stdc++.h&gt;using namespace std;#define MAXLEN 99999int greedy(int start_city,const int number,vector&lt;int&gt;&amp;city, const vector&lt; vector&lt;int&gt; &gt; length )&#123; cout &lt;&lt; "TSP路线:" &lt;&lt; endl; //cout &lt;&lt; start_city &lt;&lt; "--&gt;"; int start = start_city ; int next_city = 0; int sum_min = 0 ; for(int i = 1 ; i &lt;= number ; ++i)&#123; int len = MAXLEN; for(int j = 1 ; j &lt;= number ; j++)&#123; if(city[j] == 1) &#123;continue;&#125; if(len &gt; length[start_city][j]) &#123; len = length[start_city][j]; next_city = j ; &#125; &#125; start_city = next_city ; cout&lt;&lt;start_city&lt;&lt;"--&gt;"; city[start_city] = 1; sum_min += len; &#125; sum_min += length[start_city][start] ; cout &lt;&lt; start &lt;&lt;endl; return sum_min;&#125;int main()&#123; char buffer[200]; int number = 0 ; //城市个数 int edge = 0 ; //边个数 vector&lt;int&gt; city(number+1); // 记录城市已经路过 ifstream in("tsp.txt"); in.getline(buffer,20); sscanf(buffer,"%d",&amp;number); // 构造二维数组 vector&lt; vector&lt;int&gt; &gt; length(number+1); for(int i = 0 ; i &lt; length.size() ; ++i)&#123;length[i].resize(number+1);&#125; //临界矩阵保存两点间路的长度 //输入两点间的路径个数 in.getline(buffer,20); sscanf(buffer,"%d",&amp;edge); //保存两点间路径长度 for(int i = 1 ; i &lt;= edge ; ++i)&#123; in.getline(buffer,20); int m = 0 , n = 0 , w = 0; sscanf(buffer,"%d%d%d",&amp;m,&amp;n,&amp;w); length[m][n] = w ; length[n][m] = w ; &#125; for(int i = 0 ; i &lt; length.size();++i)&#123; for(int j = 0 ; j &lt; length.size(); ++j)&#123; cout &lt;&lt; length[i][j] &lt;&lt;" "; &#125; cout &lt;&lt; endl; &#125; int start_city = 0 ; int sum_min = 0 ; in.getline(buffer,20); sscanf(buffer,"%d",&amp;start_city); sum_min = greedy(start_city,number,city,length); cout &lt;&lt; "最短路径长度为: " &lt;&lt; sum_min ; return 0;&#125; 谢谢访问]]></content>
+      <categories>
+        <category>算法课下实验</category>
+        <category>activity</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[活动安排问题]]></title>
+    <url>%2F2019%2F11%2F10%2F%E6%B4%BB%E5%8A%A8%E5%AE%89%E6%8E%92%E9%97%AE%E9%A2%98%2F</url>
+    <content type="text"><![CDATA[问题描述设有n个活动的集合e={1，2，…，n}，其中每个活动都要求使用同一资源，如演讲会场等，而在同一时间内只有一个活动能使用这一资源。每个活动i都有一个要求使用该资源的起始时间si和一个结束时间fi,且si]]></content>
+      <categories>
+        <category>算法课下实验</category>
+        <category>activity</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[最长公共子序列]]></title>
     <url>%2F2019%2F10%2F30%2F%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97%2F</url>
     <content type="text"><![CDATA[问题描述给定两个字符串，求其最大公共子序列 问题分析 本题是典型的动态规划问题，我们将大字符串分解成小字符串进行计算。 为了节省空间，我们使用一维滚动数组求解 算法设计 找到递推入口：当len(string_first) = 0 时, 一维数组元素均为零。 当len(string_second) = 0时,一维数组元素均为零 从字符串二长度为一开始，设置二层循环，对记录的一维数组进行修改 递归公式 若str1[i] == str2[j] , 则v[j] = tmp (tmp单独保存斜上角的数) 若str1[i] != str2[j] , 则v[j] = max(v[j],v[j-1]) 总时间复杂度 = O(len(str1) *len(str2)) 约等于 O(n^2) 参考代码#include &lt;bits/stdc++.h&gt;using namespace std;int main(int argc, char const *argv[])&#123; //文件操作 ifstream in("Common_subsequence.txt"); if(!in) &#123; cout &lt;&lt; "打开文件出错" &lt;&lt; endl; return 0 ; &#125; string str1 , str2 ; getline(in,str1); getline(in,str2); int len1 = str1.size() , len2 = str2.size(); int arrays = max(len1,len2); str1 = '0' + str1; str2 = '0' + str2; vector&lt;int&gt; v(arrays+1); int row = arrays,col = 0 ; string stemp ; if(len1 &gt;= len2) &#123;col = len2; stemp = str2 ; str2 = str1; str1 = stemp ;&#125; else&#123;col = len1 ;&#125; int temp = 0 , tmp = 0 ; for(int i = 1 ; i &lt;= col ; ++i)&#123; tmp = 0 ; for(int j = 1 ; j &lt;= arrays ; ++j)&#123; temp = v[j]; if(str1[i] == str2[j])&#123;v[j] = tmp + 1;&#125; else&#123;v[j] = max(v[j-1],v[j]);&#125; tmp = temp ; &#125; //输入每一行值 for(int i = 0 ; i &lt;= arrays ; ++i)&#123;cout &lt;&lt; v[i] &lt;&lt; " ";&#125; cout&lt;&lt;endl; &#125; //输入字符串一 str1 = str1.substr(1,str1.size()-1); str2 = str2.substr(1,str2.size()-1); cout &lt;&lt; "str1: "&lt;&lt;str1&lt;&lt;endl; //输入字符串二 cout &lt;&lt; "str2: "&lt;&lt;str2&lt;&lt;endl; return 0;&#125; 谢谢访问]]></content>
