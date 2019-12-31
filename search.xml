@@ -1,6 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[序列求和]]></title>
+    <url>%2F2019%2F12%2F31%2F%E5%BA%8F%E5%88%97%E6%B1%82%E5%92%8C%2F</url>
+    <content type="text"><![CDATA[题目描述求1+2+3+…+n的值。 输入格式输入包括一个整数n。 输出格式输出一行，包括一个整数，表示1+2+3+…+n的值。 样例输入4 样例输出10 样例输入100 样例输出5050 数据规模与约定1 &lt;= n &lt;= 1,000,000,000。 思路 计算1 … n的和 注意，递归一定暴栈，循环一定超时 要使用数学公式对其进行归纳 参考代码#include &lt;bits/stdc++.h&gt;using namespace std;int main(int argc, char const *argv[])&#123; long long n = 0 ; cin &gt;&gt; n ; long long sum = 0 ; if (n % 2 == 0) &#123;sum = n /2 * n + n / 2;&#125; else &#123;sum = n/2 * n + n;&#125; cout &lt;&lt; sum ; return 0;&#125; 蓝桥杯初级题目总结 1.不要使用递归，必须使用动规 2.注意每个题都极大可能有其对应数学公式(即一定有优化部分),否则一定超时 谢谢访问]]></content>
+      <categories>
+        <category>蓝桥杯</category>
+        <category>竞赛</category>
+        <category>初级</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>C++</tag>
+        <tag>蓝桥杯</tag>
+        <tag>初级</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[圆的面积]]></title>
+    <url>%2F2019%2F12%2F31%2F%E5%9C%86%E7%9A%84%E9%9D%A2%E7%A7%AF%2F</url>
+    <content type="text"><![CDATA[题目描述给定圆的半径r，求圆的面积。 输入格式输入包含一个整数r，表示圆的半径。 输出格式输出一行，包含一个实数，四舍五入保留小数点后7位，表示圆的面积。 样例输入4 样例输出50.2654825 数据规模与约定1 &lt;= r &lt;= 10000。 思路一定要记住Π的求法公式 double PI=atan(1.0)*4; 参考代码#include &lt;bits/stdc++.h&gt;using namespace std;int main(int argc, char const *argv[])&#123; double PI=atan(1.0)*4; int r = 0 ; cin &gt;&gt; r ; double result = 0 ; result = PI*r*r; printf("%0.7f",result); return 0;&#125; 谢谢访问]]></content>
+      <categories>
+        <category>蓝桥杯</category>
+        <category>竞赛</category>
+        <category>初级</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>C++</tag>
+        <tag>蓝桥杯</tag>
+        <tag>初级</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Fibonacci数列]]></title>
+    <url>%2F2019%2F12%2F31%2FFibonacci%E6%95%B0%E5%88%97%2F</url>
+    <content type="text"><![CDATA[题目描述Fibonacci数列的递推公式为：Fn=Fn-1+Fn-2，其中F1=F2=1。 当n比较大时，Fn也非常大，现在我们想知道，Fn除以10007的余数是多少。 输入格式 输入包含一个整数n。 输出格式 输出一行，包含一个整数，表示Fn除以10007的余数。 样例输入10 样例输出55 样例输入22 样例输出7704 数据规模与约定1 &lt;= n &lt;= 1,000,000。 思路归会暴栈，如果求出最后的F[N]，则F[N]已经溢出，故需要利用动态规划+等价类 公式： dp[1] = 1 ; dp[2]= 1 ; for(int i = 3 ; i &lt;= n ; ++i) {dp[i] = (dp[i-1] + dp[i-2])%10007; 参考代码#include &lt;bits/stdc++.h&gt;using namespace std;int main(int argc, char const *argv[])&#123; int n = 0 ; cin &gt;&gt; n ; vector&lt;int&gt; dp(n+1); dp[1] = 1 ; dp[2]= 1 ; for(int i = 3 ; i &lt;= n ; ++i) &#123;dp[i] = (dp[i-1] + dp[i-2])%10007;&#125; cout &lt;&lt; dp[n]; return 0;&#125; 谢谢访问]]></content>
+      <categories>
+        <category>蓝桥杯</category>
+        <category>竞赛</category>
+        <category>初级</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>C++</tag>
+        <tag>蓝桥杯</tag>
+        <tag>初级</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Banch_limit_Tsp]]></title>
     <url>%2F2019%2F11%2F23%2FBanch-limit-Tsp%2F</url>
     <content type="text"><![CDATA[问题描述设有n个城市，城市之间道路的长度均大于或等于0，还可能是∞（对应城市之间无交通线路）。一个旅行商从某个城市出发，要经过每个城市一次且仅一次，最后回到出发的城市，问他如何走才能使他走的路线最短？ 要求：优先使用矩阵归约确定限界函数的方法，或者其他方法实现。 问题分析 对于这个问题，我们采用广度优先遍历，把从起点到其他未曾走过的边的权权入队(优先队列)。 接下来每次从队中取出最小的权的元素，在其进行广度优先遍历，即从此点到其他未曾走过的边的权加上他本来的权的元素入队 结束条件，第一个所有节点都被访问过的元素被出队。 最后被出队元素在加上其最后一个被访问节点到起点的边的权 算法分析 首先从文件读取节点数量以及边数量、起点、边的权信息。所用时间T = O(n) 接着构造优先队列，所用时间 T = O(nlogn) 接下来将起点到其他个点距离入队，所用时间T = (n-1)O(log n) 之后设置while循环，每次从队中取出最小的权的元素，进行广度优先遍历，将从此点到其他未曾走过的边的权加上他本来的权的元素入队。 所用时间T = O(n) (搜索未访问节点) + (n - deep)O(log n) (入队元素) +一次出队O(log n) 总时间约为T = O(nlogn) 参考代码#include &lt;bits/stdc++.h&gt;using namespace std;typedef struct&#123; int meter = 0 ; int pos = 0 ; int v[10]; int cnt = 0;&#125;ties;bool operator&lt;(ties a, ties b) &#123; return a.meter &gt; b.meter;&#125;int main()&#123; char buffer[200]; ifstream in("bandary_TSP.txt"); int number = 0 , side = 0 , source = 0; in.getline(buffer,20); sscanf(buffer,"%d%d%d",&amp;number,&amp;side,&amp;source); vector&lt;vector&lt;int&gt; &gt; v(number+1); for(int i = 1 ; i &lt; v.size() ;++i) &#123;v[i].resize(number+1);&#125; for(int i = 1 ; i &lt;= side ;++i) &#123; int m = 0 , n = 0 , w = 0; in.getline(buffer,20); sscanf(buffer,"%d%d%d",&amp;m,&amp;n,&amp;w); v[m][n] = w ; v[n][m] = w ; &#125; priority_queue&lt;ties&gt; q; for(int i = 1 ; i &lt;= number ; ++i)&#123; if(i != source) &#123; ties temp ; temp.meter = v[source][i]; temp.v[source] = 1 ; temp.pos = i ; temp.cnt += 1 ; q.push(temp); &#125; &#125; while(!q.empty())&#123; ties temp = q.top(); temp.cnt += 1 ; if(temp.cnt + 1 == number)&#123; for(int i = 1 ;i &lt;= number ; ++i)&#123; if(temp.v[i] != 1)&#123; cout &lt;&lt; temp.meter+v[temp.pos][i]; return 0; &#125; &#125; &#125; q.pop(); for(int i = 1 ; i &lt;= number ; ++i)&#123; if(temp.v[i] != 1 &amp;&amp; i != temp.pos )&#123; temp.meter += v[temp.pos][i]; temp.v[temp.pos] = 1; temp.v[i] = 1; temp.pos = i ; q.push(temp) ; &#125; &#125; &#125; return 0; &#125; 谢谢访问]]></content>
@@ -610,9 +658,9 @@
       </categories>
       <tags>
         <tag>C++</tag>
+        <tag>蓝桥杯</tag>
         <tag>竞赛</tag>
         <tag>PAT</tag>
-        <tag>蓝桥杯</tag>
       </tags>
   </entry>
   <entry>
