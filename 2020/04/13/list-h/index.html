@@ -1,0 +1,181 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="OS内list.h函数部分讲解"><meta name="keywords" content="OS,List.h"><meta name="author" content="McKinley Lu,undefined"><meta name="copyright" content="McKinley Lu"><title>OS内list.h函数部分讲解【星辰】</title><link rel="stylesheet" href="/css/fan.css"><link rel="stylesheet" href="/css/thirdparty/jquery.mCustomScrollbar.min.css"><link rel="icon" href="/favicon-32x32-next.png"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.4/dist/instantsearch.min.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.4/dist/instantsearch-theme-algolia.min.css"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.4"></script><!-- link(rel="dns-prefetch" href="https://cdn.jsdelivr.net")--><!-- link(rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.1.1/dist/instantsearch.min.css")--><!-- script(src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.1.1/dist/instantsearch.min.js" defer)--><!-- script(src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML")--><script src="/js/mathjax/mathjax.js"></script><script type="text/x-mathjax-config"><!-- hexo-inject:begin --><!-- hexo-inject:end -->MathJax.Hub.Config({
+    tex2jax: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
+});
+</script><script>var isPassword = '' || false;
+if (isPassword) {
+    if (prompt('请输入文章密码') !== '') {
+        alert('密码错误！');
+        history.back();
+    }
+}</script><script>window.GLOBAL_CONFIG = {
+  root: '/',
+  algolia: {"appId":"LN3PR23XF5","apiKey":"4317aa049d4727fedf31f70f6f77893e","indexName":"McKinleyLu","hits":{"per_page":10},"languages":{"input_placeholder":"搜索文章","hits_empty":"找不到您查询的内容:${query}","hits_stats":"找到 ${hits} 条结果，用时 ${time} 毫秒"}},
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"local_search.hits_empty"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  }
+}</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></head><body><canvas id="universe"></canvas><!--#body--><div id="sidebar"><div class="toggle-sidebar-info button-hover"><span data-toggle="文章目录">站点概览</span></div><div class="sidebar-toc"><div class="sidebar-toc-title">目录</div><div class="sidebar-toc-progress"><span class="progress-notice">您已阅读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc-progress-bar"></div></div><div class="sidebar-toc-content" id="sidebar-toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#List-h部分函数"><span class="toc-number">1.</span> <span class="toc-text">List.h部分函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#初始化操作"><span class="toc-number">1.1.</span> <span class="toc-text">初始化操作</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#判断空操作"><span class="toc-number">2.</span> <span class="toc-text">判断空操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#向头节点后部添加节点操作"><span class="toc-number">3.</span> <span class="toc-text">向头节点后部添加节点操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#向头节点前部添加节点操作"><span class="toc-number">4.</span> <span class="toc-text">向头节点前部添加节点操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#删除链表中节点操作"><span class="toc-number">5.</span> <span class="toc-text">删除链表中节点操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#获取结构体起始指针"><span class="toc-number">6.</span> <span class="toc-text">获取结构体起始指针</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#谢谢访问"><span class="toc-number">7.</span> <span class="toc-text">谢谢访问</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info-avatar"><img class="author-info-avatar-img" src="/avatarmy.jpeg"></div><div class="author-info-name">McKinley Lu</div><div class="author-info-description">我们的梦想是星辰大海</div><div class="links-buttons"><a class="links-button button-hover" href="https://github.com/McKinleyLu" target="_blank">GitHub<i class="icon-dot bg-color7"></i></a><a class="links-button button-hover" href="mailto:lt981109@gmail.com" target="_blank">E-Mail<i class="icon-dot bg-color7"></i></a><a class="links-button button-hover" href="tencent://message/?uin=1433059961&amp;Site=&amp;Menu=yes" target="_blank">QQ<i class="icon-dot bg-color5"></i></a><a class="links-button button-hover" href="https://me.csdn.net/LuTong2018" target="_blank">CSDN<i class="icon-dot bg-color9"></i></a><a class="links-button button-hover" href="https://www.luogu.org/space/show?uid=206308" target="_blank">洛谷<i class="icon-dot bg-color4"></i></a></div><div class="author-info-articles"><a class="author-info-articles-archives article-meta" href="/archives"><span class="pull-top">日志</span><span class="pull-bottom">64</span></a><a class="author-info-articles-tags article-meta" href="/tags"><span class="pull-top">标签</span><span class="pull-bottom">20</span></a><a class="author-info-articles-categories article-meta" href="/categories"><span class="pull-top">分类</span><span class="pull-bottom">45</span></a></div><div class="friend-link"><a class="friend-link-text" href="https://huowuyan.cn/" target="_blank">推荐阅读  ||  星海</a><a class="friend-link-text" href="https://dushihao-du.github.io/" target="_blank">推荐阅读  ||  士豪</a></div></div></div><div id="main-container"><header><div id="menu-outer"><i class="menu-list-icon fas fa-bars"></i><nav id="menu-inner"><a class="menu-item" href="/">首页</a><a class="menu-item" href="/tags">标签</a><a class="menu-item" href="/categories">分类</a><a class="menu-item" href="/archives">归档</a><a class="menu-item" href="/about">关于</a></nav><div class="right-info"><a class="search social-icon"><i class="fas fa-search"></i><span> 搜索</span></a><a class="title-name" href="/">星辰</a><span id="now-time"></span></div></div></header><div id="content-outer"><div id="content-inner"><article id="post"><div class="post-header"><div class="title">OS内list.h函数部分讲解</div><div class="container"><time class="button-hover post-date"><i class="fas fa-calendar-alt article-icon" aria-hidden="true"></i> 发表于 2020-04-13 | 更新于 2020-04-13</time><!--time.button-hover.post-date #[i.fas.fa-calendar-alt.article-icon(aria-hidden="true")] #[=__('post.modified')] #[=date(page['updated'], config.date_format)]--><div class="button-hover categories"><i class="fa fa-inbox article-icon" aria-hidden="true"></i><a class="link-a" href="/categories/OS/">OS</a></div><div class="button-hover tags"><i class="fa fa-tag article-icon" aria-hidden="true"></i><a class="link-a" href="/tags/OS/">OS</a><span>&nbsp;|&nbsp;</span><i class="fa fa-tag article-icon" aria-hidden="true"></i><a class="link-a" href="/tags/List-h/">List.h</a></div></div></div><div class="main-content"><h3 id="List-h部分函数"><a href="#List-h部分函数" class="headerlink" title="List.h部分函数"></a>List.h部分函数</h3><h4 id="初始化操作"><a href="#初始化操作" class="headerlink" title="初始化操作"></a>初始化操作</h4><ul>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><li><p>首先，向函数内部传入链表头节点</p>
+</li>
+<li><p>在函数中，使头节点的pre以及next指针指向头节点 ，即 next = pre = head <a id="more"></a></p>
+</li>
+<li><p>参考代码</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">list_init</span><span class="params">(ListHead *<span class="built_in">list</span>)</span> </span>&#123;</span><br><span class="line">	<span class="built_in">list</span>-&gt;prev = <span class="built_in">list</span>-&gt;next = <span class="built_in">list</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>效果图</p>
+<p><img src="/images/init.png" style=" margin:0 auto;  "></p>
+</li>
+</ul>
+<h3 id="判断空操作"><a href="#判断空操作" class="headerlink" title="判断空操作"></a>判断空操作</h3><ul>
+<li><p>首先，向函数内部传入链表头节点</p>
+</li>
+<li><p>在函数中，判断头节点是否与它的其中一个指针分量值相同，若相同，则返回true，否则返回false</p>
+</li>
+<li><p>参考代码</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> boolean <span class="title">list_empty</span><span class="params">(ListHead *<span class="built_in">list</span>)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="built_in">list</span> == <span class="built_in">list</span>-&gt;next;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="向头节点后部添加节点操作"><a href="#向头节点后部添加节点操作" class="headerlink" title="向头节点后部添加节点操作"></a>向头节点后部添加节点操作</h3><ul>
+<li><p>首先，向函数内部传入链表头节点以及要插入节点的listhead分量指针</p>
+</li>
+<li><p>在函数中调用List_add()函数</p>
+<ul>
+<li>第一个参数为链表头节点指针</li>
+<li>第二参数为链表头节点下一个节点的指针</li>
+<li>第三个参数为待插入节点的listhead分量指针</li>
+</ul>
+</li>
+<li><p>接下来分析List_add()函数</p>
+<ul>
+<li><p>首先判断待插入节点的listhead分量指针是否为空，如果为空，则退出程序，否则，执行以下步骤</p>
+</li>
+<li><p>在这里  参数 pre = head  next  =  head-&gt;next  data为待插入节点的listhead分量指针</p>
+<p>（第一次插入 其实质为 next = pre = head ， 第i次插入其实质为 pre = head next = 上一个插入节点的listhead分量指针）</p>
+</li>
+<li><p>首先，待插入节点的listhead分量指针的pre分量设置成pre参数值</p>
+</li>
+<li><p>待插入节点的listhead分量指针的next分量设置成next参数值</p>
+</li>
+<li><p>最后，设置参数pre的next等于data，数next的pre等于data</p>
+</li>
+</ul>
+</li>
+<li><p>参考代码</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">list_add_after</span><span class="params">(ListHead *<span class="built_in">list</span>, ListHead *data)</span> </span>&#123;</span><br><span class="line">	list_add(<span class="built_in">list</span>, <span class="built_in">list</span>-&gt;next, data);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">list_add</span><span class="params">(ListHead *prev, ListHead *next, ListHead *data)</span> </span>&#123;</span><br><span class="line">	assert(data != <span class="literal">NULL</span>);                               <span class="comment">//报错&amp;&amp;终止程序！</span></span><br><span class="line">	data-&gt;prev = prev;</span><br><span class="line">	data-&gt;next = next;</span><br><span class="line">	<span class="keyword">if</span> (prev != <span class="literal">NULL</span>) prev-&gt;next = data;</span><br><span class="line">	<span class="keyword">if</span> (next != <span class="literal">NULL</span>) next-&gt;prev = data;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>只插一个节点的效果图</p>
+<p><img src="/images/list_add.png" style=" margin:0 auto;  "></p>
+</li>
+<li><p>插两个节点的过程图</p>
+<p><img src="/images/list_add_after.png" style=" margin:0 auto;  "></p>
+</li>
+<li><p>插两个节点的效果图</p>
+<p><img src="/images/list_add_after_re.png" style=" margin:0 auto;  "></p>
+</li>
+</ul>
+<h3 id="向头节点前部添加节点操作"><a href="#向头节点前部添加节点操作" class="headerlink" title="向头节点前部添加节点操作"></a>向头节点前部添加节点操作</h3><ul>
+<li><p>在这里，我们只需比较传入List_add()函数参数就可以了</p>
+</li>
+<li><p>在list_after函数中，   pre =  头节点地址   next  =  头节点的后继节点地址   data为待插入节点的listhead分量指针</p>
+<p>而在list_before函数中，pre = 头节点的前驱节点地址   next = 头节点地址    data为待插入节点的listhead分量指针</p>
+</li>
+<li><p>参考代码</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="title">voidlist_add_before</span><span class="params">(ListHead *<span class="built_in">list</span>, ListHead *data)</span> </span>&#123;</span><br><span class="line">	list_add(<span class="built_in">list</span>-&gt;prev, <span class="built_in">list</span>, data);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">list_add</span><span class="params">(ListHead *prev, ListHead *next, ListHead *data)</span> </span>&#123;</span><br><span class="line">	assert(data != <span class="literal">NULL</span>);                                  <span class="comment">//报错&amp;&amp;终止程序！</span></span><br><span class="line">	data-&gt;prev = prev;</span><br><span class="line">	data-&gt;next = next;</span><br><span class="line">	<span class="keyword">if</span> (prev != <span class="literal">NULL</span>) prev-&gt;next = data;</span><br><span class="line">	<span class="keyword">if</span> (next != <span class="literal">NULL</span>) next-&gt;prev = data;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>只插一个节点的效果图</p>
+<p><img src="/images/list_add.png" style=" margin:0 auto;  "></p>
+</li>
+<li><p>插两个节点的过程图</p>
+<p><img src="/images/list_add_before.png" style=" margin:0 auto;  "></p>
+</li>
+<li><p>插两个节点的效果图</p>
+<p><img src="/images/list_add_before_re.png" style=" margin:0 auto;  "></p>
+</li>
+</ul>
+<h3 id="删除链表中节点操作"><a href="#删除链表中节点操作" class="headerlink" title="删除链表中节点操作"></a>删除链表中节点操作</h3><ul>
+<li><p>我们只需向list_del()函数中传入要删除节点的指针</p>
+</li>
+<li><p>首先，我们需要判断是否删除的指针为空，如果为空，则直接报错退出，否则，进行下一步</p>
+</li>
+<li><p>接下来，我们设置两个指针保护要删除节点的前驱节点(pre)地址以及后继节点(next)地址</p>
+</li>
+<li><p>最后我们先判断pre以及next是否为空，如果为空，无需任何操作，否则，将</p>
+<p>前驱节点(pre)的后继节点指针next设置为后继节点next</p>
+<p>后继节点(next)的前驱节点指针pre设置为前驱节点pre</p>
+</li>
+<li><p>参考代码</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">list_del</span><span class="params">(ListHead *data)</span> </span>&#123;</span><br><span class="line">	assert(data != <span class="literal">NULL</span>);</span><br><span class="line">	ListHead *prev = data-&gt;prev;</span><br><span class="line">	ListHead *next = data-&gt;next;</span><br><span class="line">	<span class="keyword">if</span> (prev != <span class="literal">NULL</span>) prev-&gt;next = next;</span><br><span class="line">	<span class="keyword">if</span> (next != <span class="literal">NULL</span>) next-&gt;prev = prev;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>删除节点过程图</p>
+<p><img src="/images/list_del.png" style=" margin:0 auto;  "></p>
+</li>
+<li><p>删除节点效果图</p>
+<p><img src="/images/list_del_re.png" style=" margin:0 auto;  "></p>
+</li>
+</ul>
+<h3 id="获取结构体起始指针"><a href="#获取结构体起始指针" class="headerlink" title="获取结构体起始指针"></a>获取结构体起始指针</h3><ul>
+<li><p>0x0地址强制转换为<code>type *</code>类型，然后取<code>type</code>中的成员<code>member</code>地址，因为起始地址为0，得到的<code>member</code>的地址就直接是该成员相对于<code>type</code>对象的偏移地址了。</p>
+</li>
+<li><p>所以该语句的功能是：得到<code>type</code>类型对象中<code>member</code>成员的地址偏移量。<br> 先将<code>ptr</code>强制转换为<code>char *</code>类型（因为<code>char *</code>类型进行加减的话，加减量为<code>sizeof(char)*offset</code>，<code>char</code>占一个字节空间，这样指针加减的步长就是1个字节，实现加一减一。）</p>
+</li>
+<li><p>整句话的意思就是：得到指向<code>type</code>的指针，已知成员的地址，然后减去这个成员相对于整个结构对象的地址偏移量，得到这个数据对象的地址。</p>
+</li>
+<li><p>参考代码</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> list_entry(ptr, type, member) \</span></span><br><span class="line">	((type*)((<span class="keyword">char</span>*)(ptr) - (<span class="keyword">int</span>)(&amp;((type*)<span class="number">0</span>)-&gt;member)))</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>解析图</p>
+<p><img src="/images/list_entry.png" style=" margin:0 auto;  "></p>
+</li>
+</ul>
+<h3 id="谢谢访问"><a href="#谢谢访问" class="headerlink" title="谢谢访问"></a>谢谢访问</h3><div style=" width:747px; height: 447px; margin:0 auto"> 
+  <img src="/images/thank.jpg" style=" margin:0 auto;  ">
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div><div class="post-copyright"><div class="post-copyright-author"><span class="post-copyright-meta">本文作者: </span><span class="post-copyright-info"><a href="mailto:undefined">McKinley Lu</a></span></div><div class="post-copyright-type"><span class="post-copyright-meta">本文链接: </span><span class="post-copyright-info"><a href="http://McKinleyLu.com/2020/04/13/list-h/">http://McKinleyLu.com/2020/04/13/list-h/</a></span></div><div class="post-copyright-notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyight-info">本博客所有文章除特别声明外，均采用 <a href="undefined"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a></a> 许可协议。转载请注明来自 <a href="http://McKinleyLu.com">星辰</a>！</span></div></div></article><div class="livere-card card" data-aos="fade-up"><div class="card-content" id="lv-container" data-id="city" data-uid="MTAyMC80NTYyMS8yMjEzMg=="><script type="text/javascript">(function (d, s) {
+let j, e = d.getElementsByTagName(s)[0];
+if (typeof LivereTower === 'function') {
+return;
+}
+j = d.createElement(s);
+j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+j.async = true;
+e.parentNode.insertBefore(j, e);
+})(document, 'script');</script></div><div id="pagination"><div class="next-post pull-right"><span class="line line-top"></span><span class="line line-right"></span><span class="line line-bottom"></span><span class="line line-left"></span><a href="/2020/02/21/ubunte-代码初步/"><span>ubunte 代码初步</span><span>&nbsp;</span><i class="fas fa-angle-right"></i></a></div></div><!--div!= paginator()--></div></div></div><div class="button-hover" id="return-top"><i class="fas fa-arrow-up" aria-hidden="true"></i></div><footer><div id="footer"><div class="button-hover" id="side-button"><i class="fas fa-arrow-right"></i></div><div class="right-content"><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fas fa-file-o">&nbsp;&nbsp;本文阅读量</i></span><span id="busuanzi_value_page_pv"></span><span>次</span></div><div class="copyright">&copy;2019 ～ 2020 By McKinley Lu</div></div></div></footer></div><!--js(src=url_for(url) + '?version=' + version())--><script src="/js/thirdparty/jquery-3.3.1.min.js"></script><!--script(src=url)--><!--js(src=url_for(url) + '?version=' + version())--><script src="/js/thirdparty/velocity.min.js"></script><!--script(src=url)--><!--js(src=url_for(url) + '?version=' + version())--><script src="/js/thirdparty/jquery.mCustomScrollbar.concat.min.js"></script><!--script(src=url)--><!--js(src=url_for(url) + '?version=' + version())--><script src="/js/fan.js"></script><!--script(src=url)--><!--js(src=url_for(url) + '?version=' + version())--><script src="/js/canvas_bg.js"></script><!--script(src=url)--><!--js(src=url_for(url) + '?version=' + version())--><script src="/js/utils.js"></script><!--script(src=url)--><!--js(src=url_for(url) + '?version=' + version())--><script src="/js/scroll.js"></script><!--script(src=url)--><!--js(src=url_for(url) + '?version=' + version())--><script src="/js/sidebar.js"></script><!--script(src=url)--><!--js(src=url_for(url) + '?version=' + version())--><script src="/js/copy.js"></script><!--script(src=url)--><div class="search-dialog"><div id="algolia-search-title">Algolia</div><div class="search-close-button"><i class="fa fa-times"></i></div><!--div#current-refined-values--><!--div#clear-all--><div id="search-box"></div><!--div#refinement-list--><hr><div id="hits"></div><div id="algolia-pagination"></div></div><div class="search-mask"></div><script src="/js/search/algolia.js"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end --></body></html>
