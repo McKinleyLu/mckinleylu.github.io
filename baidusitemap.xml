@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://McKinleyLu.com/2020/09/09/HTML/</loc>
+    <lastmod>2020-09-09</lastmod>
+  </url>  <url>
+    <loc>http://McKinleyLu.com/2019/08/10/C++%E7%AC%AC%E5%9B%9B%E5%91%A8/</loc>
+    <lastmod>2020-09-09</lastmod>
+  </url>  <url>
     <loc>http://McKinleyLu.com/2020/04/13/list-h/</loc>
     <lastmod>2020-04-18</lastmod>
   </url>  <url>
@@ -167,9 +173,6 @@
     <lastmod>2019-08-17</lastmod>
   </url>  <url>
     <loc>http://McKinleyLu.com/2019/07/17/%E6%B4%9B%E8%B0%B7p1015/</loc>
-    <lastmod>2019-08-17</lastmod>
-  </url>  <url>
-    <loc>http://McKinleyLu.com/2019/08/10/C++%E7%AC%AC%E5%9B%9B%E5%91%A8/</loc>
     <lastmod>2019-08-17</lastmod>
   </url>  <url>
     <loc>http://McKinleyLu.com/2019/08/10/C-%E7%AC%AC%E5%9B%9B%E5%91%A8plus/</loc>
